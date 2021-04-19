@@ -32,5 +32,5 @@ https://github.com/ljlm0402/typescript-express-starter
 
 ## README History
 
-2021.04.20 초기 코드 업로드 및 설명 추가
-2021.04.19 정승욱님 레포 생성
+- 2021.04.20 초기 코드 업로드 및 설명 추가
+- 2021.04.19 레포 생성
