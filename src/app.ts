@@ -8,6 +8,7 @@ import compression from 'compression';
 import Routes from './interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
 import { logger, stream } from './utils/logger';
+import { connectMongoMemoryDb } from './utils/mongoMemoryDB';
 
 class App {
   public app: express.Application;
@@ -22,6 +23,11 @@ class App {
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
     this.initializeErrorHandling();
+    this.connectDatabase();
+  }
+
+  public connectDatabase() {
+    connectMongoMemoryDb();
   }
 
   public listen() {
