@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 import * as HTMLParser from 'node-html-parser';
 import { Lock } from './lock';
-import { IMentoring } from '../interfaces/soma.interface';
+import { IMentoring, ISchedule } from '../interfaces/soma.interface';
 
 let browser: puppeteer.Browser = null;
 let page: puppeteer.Page = null;
@@ -62,7 +62,13 @@ export async function login(): Promise<boolean> {
   return loggedIn;
 }
 
-export async function fetchMentorings(pageIndex: number = 1): Promise<any[]> {
+// 멘토링 id에 해당하는 멘토링 정보를 멘토링 상세 페이지까지 접속해서 가져오는 함수
+export async function fetchMentoringWithDetails(id: string): Promise<IMentoring> {
+  return null;
+}
+
+// 페이지 인덱스에 해당하는 멘토링 페이지의 멘토링들을 가져오는 함수(상세페이지 내용은 가져오지 않는다!)
+export async function fetchMentorings(pageIndex: number = 1): Promise<IMentoring[]> {
   if (pageIndex <= 0) pageIndex = 0;
   const html: string = await getHtml(`https://www.swmaestro.org/sw/mypage/mentoLec/list.do?menuNo=200046&pageIndex=${pageIndex}`);
   const root = HTMLParser.parse(html);
@@ -75,4 +81,9 @@ export async function fetchMentorings(pageIndex: number = 1): Promise<any[]> {
     } as IMentoring;
     return mentoring;
   });
+}
+
+// 원하는 년도/월의 일정을 가져오는 함수
+export async function fetchSchedules(year: number = 2021, month: number = 4): Promise<ISchedule[]> {
+  return null;
 }
