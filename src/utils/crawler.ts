@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer';
+import { URL } from 'url';
 import * as HTMLParser from 'node-html-parser';
 import { Lock } from './lock';
 import { IMentoring, ISchedule } from '../interfaces/soma.interface';
@@ -76,8 +77,15 @@ export async function fetchMentorings(pageIndex: number = 1): Promise<IMentoring
 
   return trs.map(tr => {
     const mentoring: IMentoring = {
-      //TODO: mentoring 채우기
-      title: tr.querySelector('a').text,
+      id: new URL(tr.querySelector('a').getAttribute('href'), 'https://www.swmaestro.org/').searchParams.get('qustnrSn'),
+      title: tr.querySelector('a').text.trim(),
+      state: tr.querySelector('td:nth-child(6)').textContent.trim(),
+      createdAt: new Date(tr.querySelector('td:nth-child(8)').textContent.trim()),
+      mentoringDate: new Date(tr.querySelector('td:nth-child(4)').textContent.trim()),
+      appliedCnt: parseInt(tr.querySelector('td:nth-child(5)').textContent.trim()),
+      writer: tr.querySelector('td:nth-child(7)').textContent.trim(),
+      applyStartDate: new Date(tr.querySelector('td:nth-child(3)').textContent.trim().split('~')[0].trim()),
+      applyEndDate: new Date(tr.querySelector('td:nth-child(3)').textContent.trim().split('~')[1].trim()),
     } as IMentoring;
     return mentoring;
   });
