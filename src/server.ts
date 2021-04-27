@@ -3,6 +3,7 @@ import App from './app';
 import ChatbotRoute from './routes/chatbot.route';
 import IndexRoute from './routes/index.route';
 import { initialize } from './utils/crawler';
+import { logger } from './utils/logger';
 import validateEnv from './utils/validateEnv';
 
 validateEnv();
@@ -13,4 +14,4 @@ initialize()
     app.listen();
     console.log('Starting Server');
   })
-  .catch(console.error);
+  .catch((error: Error) => logger.error(error));

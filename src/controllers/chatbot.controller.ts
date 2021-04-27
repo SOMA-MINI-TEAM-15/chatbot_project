@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { KakaoWorkConversation, KakaoWorkUserInfo } from '../dtos/kakaowork.dto';
+import { getMostRecentMentoring } from '../services/mentoring.service';
+import { fetchMentorings } from '../utils/crawler';
 import * as kakaoWork from '../utils/kakaowork';
 
 class ChatbotController {
@@ -43,13 +45,41 @@ class ChatbotController {
     }
   };
 
-  public requestController = (req: Request, res: Response, next: NextFunction): void => {
+  public triggeredByNewMentoring = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const { message, value } = req.body as { [k in string]: string };
+      const recentMentoring = await getMostRecentMentoring();
+
+      // 그냥 레디스를 쓸까...1
+
+      res.status(200).json();
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public requestController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      // message: 어떤 버튼을 눌렀는지.
+      const { message } = req.body as { [k in string]: string };
+
+      // let data = {};
+
+      // switch (message) {
+      //   case 'userSearch':
+      //     break;
+      //   case 'monthly':
+      //     break;
+      //   case 'mentoring':
+      //     const mentoring = await fetchMentorings();
+      //     data = { ...mentoring };
+      //   default:
+      //     break;
+      // }
+
+      const data = await fetchMentorings();
 
       // 모달에서 추가 로직을 요청했을 때 모달 보내기
-
-      res.status(200).json({ message, value });
+      res.status(200).json(data);
     } catch (error) {
       next(error);
     }
@@ -57,7 +87,7 @@ class ChatbotController {
 
   public callbackController = (req: Request, res: Response, next: NextFunction): void => {
     try {
-      const { message, actions, action_time, value } = req.body;
+      const { message, actions, value } = req.body;
 
       // 추가 로직에서 데이터를 요청했을 때 처리(대표적으로 크롤링) 해서 보내기
 

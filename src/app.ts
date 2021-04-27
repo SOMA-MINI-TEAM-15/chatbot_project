@@ -8,7 +8,7 @@ import compression from 'compression';
 import Routes from './interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
 import { logger, stream } from './utils/logger';
-import { connectMongoMemoryDb } from './utils/mongoMemoryDB';
+import { connectMongoMemoryDb } from './utils/mongoDB';
 
 class App {
   public app: express.Application;

@@ -3,7 +3,7 @@ import { URL } from 'url';
 import * as HTMLParser from 'node-html-parser';
 import { Lock } from './lock';
 import { IMentoring, ISchedule } from '../interfaces/soma.interface';
-import EventEmitter from 'node:events';
+import EventEmitter from 'events';
 import { addMentoring, getMostRecentMentoring } from '../services/mentoring.service';
 import { promisify } from 'util';
 

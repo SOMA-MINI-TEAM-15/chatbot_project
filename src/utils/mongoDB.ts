@@ -15,12 +15,15 @@ export const dbConnOpts = {
 };
 
 export const connectMongoMemoryDb = async () => {
-  const dbUri = await memoryDb.getUri();
+  const dbUri = process.env.MONGO_URI || (await memoryDb.getUri());
 
   mongoose
     .connect(dbUri, dbConnOpts)
     .then(() => {
-      logger.info(`*** Successfully connect MongoMemoryDB!`);
+      logger.info(`*** Successfully connected database: ${dbUri}`);
+      if (!process.env.MONGO_URI) {
+        logger.info(`*** This server uses MemoryDbServer. You can lose data if you stop server.`);
+      }
     })
     .catch(error => {
       logger.error(`[MongoMemoryConnectError] ${error}`);
