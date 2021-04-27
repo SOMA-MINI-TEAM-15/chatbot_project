@@ -3,11 +3,17 @@ import { URL } from 'url';
 import * as HTMLParser from 'node-html-parser';
 import { Lock } from './lock';
 import { IMentoring, ISchedule } from '../interfaces/soma.interface';
+import EventEmitter from 'node:events';
+import { addMentoring, getMostRecentMentoring } from '../services/mentoring.service';
+import { promisify } from 'util';
 
+const sleepPromise = promisify(setTimeout);
+
+const eventEmitter: EventEmitter = new EventEmitter();
 let browser: puppeteer.Browser = null;
 let page: puppeteer.Page = null;
 const lock = new Lock();
-let _isLoggedIn: boolean = true;
+let _isLoggedIn = true;
 
 export async function initialize(): Promise<void> {
   browser = await puppeteer.launch({
@@ -24,7 +30,29 @@ export async function initialize(): Promise<void> {
     }
     await dialog.dismiss();
   });
+  setImmediate(startCheckingNewMentoringsRoutine);
   //TODO: 불필요한 리소스 막기(img, font, css?)
+}
+
+async function startCheckingNewMentoringsRoutine() {
+  const rescentLocalMentoring = await getMostRecentMentoring();
+  const rescentOnlineMentoring = await fetchMentorings()[0];
+  if (rescentOnlineMentoring && parseInt(rescentOnlineMentoring.id) > parseInt(rescentLocalMentoring.id)) {
+    const newMentorings: IMentoring[] = [];
+    while (true) {
+      const i = 1;
+      const mentorings = await fetchMentorings(i);
+      const newMentoringsPartial = mentorings.filter(m => parseInt(m.id) > parseInt(rescentLocalMentoring.id));
+      if (newMentorings.length == 0) break;
+      newMentoringsPartial.forEach(m => newMentorings.push(m));
+    }
+    for (const newMentoring of newMentorings) {
+      await addMentoring(newMentoring);
+      eventEmitter.emit('new_mentoring', newMentoring);
+    }
+  }
+  await sleepPromise(60 * 1000);
+  setImmediate(startCheckingNewMentoringsRoutine);
 }
 
 export async function getHtml(url: string): Promise<string> {
@@ -69,7 +97,7 @@ export async function fetchMentoringWithDetails(id: string): Promise<IMentoring>
 }
 
 // 페이지 인덱스에 해당하는 멘토링 페이지의 멘토링들을 가져오는 함수(상세페이지 내용은 가져오지 않는다!)
-export async function fetchMentorings(pageIndex: number = 1): Promise<IMentoring[]> {
+export async function fetchMentorings(pageIndex = 1): Promise<IMentoring[]> {
   if (pageIndex <= 0) pageIndex = 0;
   const html: string = await getHtml(`https://www.swmaestro.org/sw/mypage/mentoLec/list.do?menuNo=200046&pageIndex=${pageIndex}`);
   const root = HTMLParser.parse(html);
@@ -92,6 +120,6 @@ export async function fetchMentorings(pageIndex: number = 1): Promise<IMentoring
 }
 
 // 원하는 년도/월의 일정을 가져오는 함수
-export async function fetchSchedules(year: number = 2021, month: number = 4): Promise<ISchedule[]> {
+export async function fetchSchedules(year = 2021, month = 4): Promise<ISchedule[]> {
   return null;
 }
