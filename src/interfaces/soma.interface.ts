@@ -1,18 +1,15 @@
 // 챗봇 사용자
 export interface IChatUser {
   // 개인 채팅에 대한 정보를 가지는 데이터
-  id: string; // 카카오워크 채팅 유저 고유 ID
+  userId: string; // 카카오워크 채팅 유저 고유 ID
+  allowNotification: boolean;
 }
 
 // 소마 사용자
-export interface IUser {
+export interface ISomaUser {
   name: string; // 사용자 이름
-  email: string; // 사용자 이메일
-  major: string; // 멘토: 학력 | 멘티: 학과
-  location: string; // 멘토: 재직회사 | 멘티: 거주지역
-  skills: string[]; // 멘토: 보유기술 | 멘티: 관심기술
-  info1: string; // 첫번째 장문 소개(멘토/멘티 속성 이름 다름)
-  info2: string; // 두번째 장문 소개(멘토/멘티 속성 이름 다름)
+  major: string[]; // 멘토: 학력 | 멘티: 학과
+  userType: 'mentor' | 'mentee';
 }
 
 // 소마 멘토링
@@ -28,15 +25,6 @@ export interface IMentoring {
   applyEndDate: Date; // 접수기간 끝
   mentoringLocation?: string; // 장소
   content?: string; // 본문
-}
-
-// 소마 알림
-export interface INotice {
-  id: string; // NO. 에있는 숫자가 아니라 링크의 nttId 프로퍼티이다.
-  title: string; // 제목
-  writer: string; // 작성자
-  createdAt: Date; // 등록일
-  content: string; // 본문
 }
 
 // 소마 일정
