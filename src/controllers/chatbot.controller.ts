@@ -74,10 +74,10 @@ class ChatbotController {
         case 'user_search':
           if (type === 'mento') {
             const somaMentor = await (await fetchSomaUsers('mentor')).filter(user => user.name === value)[0];
-            responseModal = userSearchResultModal(somaMentor.name, somaMentor.major.join(','));
+            responseModal = userSearchResultModal(somaMentor.name, type, somaMentor.major.join(','));
           } else if (type === 'mentee') {
             const somaMentee = await (await fetchSomaUsers('mentee')).filter(user => user.name === value)[0];
-            responseModal = userSearchResultModal(somaMentee.name, somaMentee.major.join(','));
+            responseModal = userSearchResultModal(somaMentee.name, type, somaMentee.major.join(','));
           }
           break;
         case 'mentoring_search':

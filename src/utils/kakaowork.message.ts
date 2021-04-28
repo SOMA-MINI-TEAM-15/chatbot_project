@@ -94,13 +94,13 @@ export const userSearchRequestModal = () => {
   };
 };
 
-export const userSearchResultModal = (name: string, skills: string) => {
+export const userSearchResultModal = (name: string, type: string, skills: string) => {
   return {
-    text: '멘티 검색',
+    text: `${type === 'mentee' ? '멘티' : '멘토'} 검색 결과`,
     blocks: [
       {
         type: 'header',
-        text: '🔎 멘티 검색 결과',
+        text: `🔎 ${type === 'mentee' ? '멘티' : '멘토'} 검색 결과`,
         style: 'blue',
       },
       {
