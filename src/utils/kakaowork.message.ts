@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { IMentoring, ISchedule } from '../interfaces/soma.interface';
 
 export const broadcastMessage = (conversationId: number) => {
@@ -268,44 +269,43 @@ export const calendarRequestModal = () => {
           options: [
             {
               text: '4월',
-              value: 4,
+              value: '4',
             },
             {
               text: '5월',
-              value: 5,
+              value: '5',
             },
             {
               text: '6월',
-              value: 6,
+              value: '6',
             },
             {
               text: '7월',
-              value: 7,
+              value: '7',
             },
             {
               text: '8월',
-              value: 8,
+              value: '8',
             },
             {
               text: '9월',
-              value: 9,
+              value: '9',
             },
             {
               text: '10월',
-              value: 10,
+              value: '10',
             },
             {
               text: '11월',
-              value: 11,
+              value: '11',
             },
             {
               text: '12월',
-              value: 12,
+              value: '12',
             },
           ],
           placeholder: '선택해주세요.',
         },
-
       ],
     },
   };
@@ -314,7 +314,13 @@ export const calendarRequestModal = () => {
 export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
   const output = {
     text: '월간 일정',
-    blocks: [],
+    blocks: [
+      {
+        type: 'header',
+        text: `📅 ${month} 월 SWM 월간 일정표`,
+        style: 'blue',
+      },
+    ],
   };
 
   if (!schedules) {
@@ -338,7 +344,7 @@ export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
         term: '일정',
         content: {
           type: 'text',
-          text: `${schedule.startDate} ~ ${schedule.endDate}`,
+          text: `${dayjs(schedule.startDate).format('YYYY-MM-DD')} ~ ${dayjs(schedule.endDate).format('YYYY-MM-DD')}`,
           markdown: false,
         },
         accent: true,

@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import { KakaoWorkCallbackInfo, KakaoWorkConversation, KakaoWorkRequestInfo, KakaoWorkUserInfo } from '../dtos/kakaowork.dto';
 import { IChatUser } from '../interfaces/soma.interface';
-import { fetchMentorings, fetchSomaUsers } from '../utils/crawler';
+import { fetchMentorings, fetchSchedules, fetchSomaUsers } from '../utils/crawler';
 import * as kakaoWork from '../utils/kakaowork';
 import {
   broadcastMessage,
   calendarRequestModal,
+  calendarResultModal,
   mentoringSearchRequestModal,
   userSearchRequestModal,
   userSearchResultModal,
@@ -87,8 +88,8 @@ class ChatbotController {
           // }
           break;
         case 'calendar':
-          // const schedules = await fetchSchedules();
-          responseModal = calendarRequestModal();
+          const schedules = await fetchSchedules(2021, +type);
+          responseModal = calendarResultModal(+type, schedules);
           break;
         case 'noti_on_off':
           console.log('on and off pressed');
