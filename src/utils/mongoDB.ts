@@ -14,7 +14,7 @@ export const dbConnOpts = {
   useFindAndModify: true,
 };
 
-export const connectMongoMemoryDb = async () => {
+export const connectMongoDb = async () => {
   const dbUri = process.env.MONGO_URI || (await memoryDb.getUri());
 
   mongoose
