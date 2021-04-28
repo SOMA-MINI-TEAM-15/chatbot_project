@@ -13,6 +13,6 @@ describe('Mentoring Service', () => {
   });
   it('should getMostRecentMentoring', async () => {
     const mentoring = await getMostRecentMentoring();
-    expect(mentoring.id).toEqual(642);
+    expect(mentoring.id).toEqual(645);
   });
 });

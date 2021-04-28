@@ -1,14 +1,22 @@
 import { IMentoring } from '../interfaces/soma.interface';
-import { MentoringModel } from '../models/mentoring.model';
+import { Mentoring } from '../models/mentoring.model';
 
 export async function addMentoring(mentoring: IMentoring): Promise<IMentoring> {
-  return MentoringModel.create(mentoring);
+  return Mentoring.create(mentoring);
+}
+
+export async function updateMentoring(mentoring: IMentoring): Promise<IMentoring> {
+  return Mentoring.findOneAndUpdate({ id: mentoring.id }, mentoring);
 }
 
 export async function getMentoringById(id: number): Promise<IMentoring> {
-  return MentoringModel.findOne({ id });
+  return Mentoring.findOne({ id });
 }
 
 export async function getMostRecentMentoring(): Promise<IMentoring> {
-  return MentoringModel.findOne().sort({ id: -1 });
+  return Mentoring.findOne().sort({ id: -1 });
+}
+
+export async function getMentorings(): Promise<IMentoring[]> {
+  return Mentoring.find();
 }
