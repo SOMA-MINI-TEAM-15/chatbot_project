@@ -193,6 +193,10 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
     ],
   };
 
+  if (mentoringInfo.length > 3) {
+    mentoringInfo = mentoringInfo.slice(0, 3);
+  }
+
   for (const mentoring of mentoringInfo) {
     modal.blocks.push(
       {
@@ -220,7 +224,7 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
         term: '접수기간',
         content: {
           type: 'text',
-          text: `${mentoring.applyStartDate} ~ ${mentoring.applyEndDate}`,
+          text: `${dayjs(mentoring.applyStartDate).format('YYYY-MM-DD')} ~ ${dayjs(mentoring.applyEndDate).format('YYYY-MM-DD')}`,
           markdown: false,
         },
         accent: true,
@@ -240,10 +244,13 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
         term: '접수인원',
         content: {
           type: 'text',
-          text: mentoring.appliedCnt,
+          text: mentoring.appliedCnt.toString(),
           markdown: false,
         },
         accent: true,
+      },
+      {
+        type: 'divider',
       },
     );
   }
