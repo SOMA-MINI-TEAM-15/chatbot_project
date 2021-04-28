@@ -20,4 +20,4 @@ const MentoringSchema = new Schema<IMentoring & Document, Model<IMentoring & Doc
   content: String,
 });
 
-export const MentoringModel = model('Mentoring', MentoringSchema);
+export const Mentoring = model('Mentoring', MentoringSchema);
