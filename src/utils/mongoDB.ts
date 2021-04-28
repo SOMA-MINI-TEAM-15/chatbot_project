@@ -22,7 +22,7 @@ export const connectMongoMemoryDb = async () => {
     .then(() => {
       logger.info(`*** Successfully connected database: ${dbUri}`);
       if (!process.env.MONGO_URI) {
-        logger.info(`*** This server uses MemoryDbServer. You can lose data if you stop server.`);
+        logger.info(`*** This server uses MemoryDbServer. Notice that your data can be lost.`);
       }
     })
     .catch(error => {

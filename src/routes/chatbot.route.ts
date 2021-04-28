@@ -12,7 +12,7 @@ class ChatbotRoute implements Route {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/all`, this.chatbotController.sendMessageToAllUsers);
+    this.router.post(`${this.path}/all`, this.chatbotController.sendMessageToAllUsers);
     this.router.post(`${this.path}/request`, this.chatbotController.requestController);
     this.router.post(`${this.path}/callback`, this.chatbotController.callbackController);
   }
