@@ -75,7 +75,7 @@ export const userSearchRequestModal = () => {
               value: 'mento',
             },
           ],
-          placeholder: '멘티',
+          placeholder: '선택해주세요.',
         },
         {
           type: 'label',
@@ -162,7 +162,7 @@ export const mentoringSearchRequestModal = () => {
               value: 'content',
             },
           ],
-          placeholder: '제목',
+          placeholder: '검색 분류',
         },
         {
           type: 'label',
@@ -303,7 +303,7 @@ export const calendarRequestModal = () => {
               value: 12,
             },
           ],
-          placeholder: new Date().getUTCMonth(),
+          placeholder: '월 선택',
         },
       ],
     },

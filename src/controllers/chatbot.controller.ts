@@ -22,19 +22,6 @@ class ChatbotController {
 
   public requestController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      // {
-      //   action_time: '2021-04-28T15:59:35.573528Z',
-      //   message: {
-      //     blocks: [ [Object], [Object], [Object], [Object], [Object], [Object] ],
-      //     conversation_id: 1150461,
-      //     id: 307546334010425340,
-      //     text: null,
-      //     user_id: 2632878
-      //   },
-      //   react_user_id: 2632844,
-      //   type: 'request_modal',
-      //   value: 'noti_on_off'
-      // }
       const requestInfo: KakaoWorkRequestInfo = req.body;
       let responseModal;
 
@@ -63,7 +50,7 @@ class ChatbotController {
   public callbackController = (req: Request, res: Response, next: NextFunction): void => {
     try {
       const userInput: KakaoWorkCallbackInfo = req.body;
-
+      console.log(userInput);
       // 추가 로직에서 데이터를 요청했을 때 처리(대표적으로 크롤링) 해서 보내기
       // 1. 유저 검색(멘토/멘티 선택 및 이름 기반 검색)
       // 2. 일정 검색(선택한 월로 검색)
