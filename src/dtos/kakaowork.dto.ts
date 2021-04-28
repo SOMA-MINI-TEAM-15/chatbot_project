@@ -44,22 +44,30 @@ export class KakaoWorkRequestInfo {
 }
 /**
  *  
- *  action_time: '2021-04-26T17:40:33.192819Z',
-    actions: { rating: '3', wanted: '응애' },
-    message: { 
-      blocks: [ [Object], [Object], [Object] ],
-      conversation_id: 1150461,
-      id: 306846483207471100,
-      text: null,
-      user_id: 2632878
-    },
-    react_user_id: 2632844,
-    type: 'submission',
-    value: 'cafe_survey_results' }
+{
+  action_time: '2021-04-28T16:17:18.678971Z',
+  actions: { type: 'mentee', value: '박태형' },
+  message: {
+    blocks: [ [Object], [Object], [Object], [Object], [Object], [Object] ],
+    conversation_id: 1150461,
+    id: 307550530646433800,
+    text: null,
+    user_id: 2632878
+  },
+  react_user_id: 2632844,
+  type: 'submission',
+  value: 'user_search'
+}
  */
 export class KakaoWorkCallbackInfo {
   message: KakaoWorkChatMessageFormat;
+  actions: KakaoWorkCallbackActions;
   react_user_id: number;
+  type: string;
+  value: string;
+}
+
+export class KakaoWorkCallbackActions {
   type: string;
   value: string;
 }
