@@ -1,3 +1,5 @@
+import { IMentoring, ISchedule } from '../interfaces/soma.interface';
+
 export const broadcastMessage = (conversationId: number) => {
   return {
     conversationId,
@@ -31,8 +33,8 @@ export const broadcastMessage = (conversationId: number) => {
       {
         type: 'button',
         action_type: 'call_modal',
-        value: 'monthly',
-        text: '일정 확인하기',
+        value: 'calendar',
+        text: '일정 확인',
         style: 'primary',
       },
       {
@@ -46,7 +48,52 @@ export const broadcastMessage = (conversationId: number) => {
   };
 };
 
-export const userSearchMessage = (name: string, skills: string) => {
+export const userSearchRequestModal = () => {
+  return {
+    view: {
+      title: '멘티/멘토 검색',
+      accept: '검색하기',
+      decline: '취소',
+      value: 'user_search',
+      blocks: [
+        {
+          type: 'label',
+          text: '멘티와 멘토 중 선택해주세요.',
+          markdown: false,
+        },
+        {
+          type: 'select',
+          name: 'type',
+          required: true,
+          options: [
+            {
+              text: '멘티',
+              value: 'mentee',
+            },
+            {
+              text: '멘토',
+              value: 'mento',
+            },
+          ],
+          placeholder: '멘티',
+        },
+        {
+          type: 'label',
+          text: '이름을 입력해주세요.',
+          markdown: false,
+        },
+        {
+          type: 'input',
+          name: 'user_name',
+          required: false,
+          placeholder: 'ex) 홍길동',
+        },
+      ],
+    },
+  };
+};
+
+export const userSearchResultModal = (name: string, skills: string) => {
   return {
     text: '멘티 검색',
     blocks: [
@@ -82,4 +129,234 @@ export const userSearchMessage = (name: string, skills: string) => {
       },
     ],
   };
+};
+
+export const mentoringSearchRequestModal = () => {
+  return {
+    view: {
+      title: '멘토링 검색',
+      accept: '검색하기',
+      decline: '취소',
+      value: 'mentoring_search',
+      blocks: [
+        {
+          type: 'label',
+          text: '검색 분류를 알려주세요.',
+          markdown: false,
+        },
+        {
+          type: 'select',
+          name: 'type',
+          required: true,
+          options: [
+            {
+              text: '제목',
+              value: 'title',
+            },
+            {
+              text: '작성자',
+              value: 'writer',
+            },
+            {
+              text: '내용',
+              value: 'content',
+            },
+          ],
+          placeholder: '제목',
+        },
+        {
+          type: 'label',
+          text: '내용을 입력해주세요.',
+          markdown: false,
+        },
+        {
+          type: 'input',
+          name: 'value',
+          required: false,
+          placeholder: '머신러닝',
+        },
+      ],
+    },
+  };
+};
+
+export const mentoringSearchResultModal = (mentoringInfo: IMentoring) => {
+  return {
+    text: '멘토링 검색 결과',
+    blocks: [
+      {
+        type: 'header',
+        text: '🔎 멘토링 검색 결과',
+        style: 'blue',
+      },
+      {
+        type: 'description',
+        term: '제목',
+        content: {
+          type: 'text',
+          text: mentoringInfo.title,
+          markdown: false,
+        },
+        accent: true,
+      },
+      {
+        type: 'description',
+        term: '작성자',
+        content: {
+          type: 'text',
+          text: mentoringInfo.writer,
+          markdown: false,
+        },
+        accent: true,
+      },
+      {
+        type: 'description',
+        term: '접수기간',
+        content: {
+          type: 'text',
+          text: `${mentoringInfo.applyStartDate} ~ ${mentoringInfo.applyEndDate}`,
+          markdown: false,
+        },
+        accent: true,
+      },
+      {
+        type: 'description',
+        term: '상태',
+        content: {
+          type: 'text',
+          text: mentoringInfo.state,
+          markdown: false,
+        },
+        accent: true,
+      },
+      {
+        type: 'description',
+        term: '접수인원',
+        content: {
+          type: 'text',
+          text: mentoringInfo.appliedCnt,
+          markdown: false,
+        },
+        accent: true,
+      },
+      // {
+      //   type: 'button',
+      //   text: '자세히 보기',
+      //   style: 'default',
+      // },
+    ],
+  };
+};
+
+export const calendarRequestModal = () => {
+  return {
+    view: {
+      title: '일정 확인',
+      accept: '검색하기',
+      decline: '취소',
+      value: 'calendar',
+      blocks: [
+        {
+          type: 'label',
+          text: '몇 월의 일정을 확인할까요?',
+          markdown: false,
+        },
+        {
+          type: 'select',
+          name: 'type',
+          required: true,
+          options: [
+            {
+              text: '4월',
+              value: 4,
+            },
+            {
+              text: '5월',
+              value: 5,
+            },
+            {
+              text: '6월',
+              value: 6,
+            },
+            {
+              text: '7월',
+              value: 7,
+            },
+            {
+              text: '8월',
+              value: 8,
+            },
+            {
+              text: '9월',
+              value: 9,
+            },
+            {
+              text: '10월',
+              value: 10,
+            },
+            {
+              text: '11월',
+              value: 11,
+            },
+            {
+              text: '12월',
+              value: 12,
+            },
+          ],
+          placeholder: new Date().getUTCMonth(),
+        },
+      ],
+    },
+  };
+};
+
+export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
+  const output = {
+    text: '월간 일정',
+    blocks: [],
+  };
+
+  if (!schedules) {
+    return output;
+  }
+
+  for (const schedule of schedules) {
+    output.blocks.push(
+      {
+        type: 'description',
+        term: '제목',
+        content: {
+          type: 'text',
+          text: schedule.title,
+          markdown: false,
+        },
+        accent: true,
+      },
+      {
+        type: 'description',
+        term: '일정',
+        content: {
+          type: 'text',
+          text: `${schedule.startDate} ~ ${schedule.endDate}`,
+          markdown: false,
+        },
+        accent: true,
+      },
+      {
+        type: 'description',
+        term: '구분',
+        content: {
+          type: 'text',
+          text: schedule.classification,
+          markdown: false,
+        },
+        accent: true,
+      },
+      {
+        type: 'divider',
+      },
+    );
+  }
+
+  return output;
 };
