@@ -392,7 +392,7 @@ export const userNotificationSelectModal = () => {
         },
         {
           type: 'select',
-          name: 'type',
+          name: 'value',
           required: true,
           options: [
             {
@@ -413,10 +413,8 @@ export const userNotificationSelectModal = () => {
 
 export const userNotificationSelectResult = (value: boolean) => {
   return {
-    view: {
-      title: '알림 ON/OFF',
-      value: 'noti_on_off',
-      blocks: [
+	text: '알림 ON/OFF',
+	blocks: [
         {
           type: 'header',
           text: `알림설정을 완료했습니다.`,
@@ -433,6 +431,5 @@ export const userNotificationSelectResult = (value: boolean) => {
           accent: true,
         },
       ],
-    },
-  };
+	};
 };

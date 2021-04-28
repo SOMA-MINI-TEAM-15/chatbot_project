@@ -64,23 +64,17 @@ class ChatbotController {
   public callbackController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const callbackInfo: KakaoWorkCallbackInfo = req.body;
-      console.log(callbackInfo);
-      // 추가 로직에서 데이터를 요청했을 때 처리(대표적으로 크롤링) 해서 보내기
-      // 1. 유저 검색(멘토/멘티 선택 및 이름 기반 검색)
-      // 2. 일정 검색(선택한 월로 검색)
-      // 3. 멘토링 검색(제목, 작성자, 내용 기반 검색)
-      // 4. 신규 멘토링 On/Off 기능 (유저 allowNotification만 반전)
-
-      let responseModal;
       const { type, value } = callbackInfo.actions;
+	  let responseModal;
+      
       switch (callbackInfo.value) {
         case 'user_search':
           if (type === 'mento') {
             const somaMentor = await (await fetchSomaUsers('mentor')).filter(user => user.name === value)[0];
-            responseModal = userSearchResultModal(somaMentor.name, type, somaMentor.major.join(','));
+            responseModal = userSearchResultModal(somaMentor.name, type, somaMentor.major.join(', '));
           } else if (type === 'mentee') {
             const somaMentee = await (await fetchSomaUsers('mentee')).filter(user => user.name === value)[0];
-            responseModal = userSearchResultModal(somaMentee.name, type, somaMentee.major.join(','));
+            responseModal = userSearchResultModal(somaMentee.name, type, somaMentee.major.join(', '));
           }
           break;
         case 'mentoring_search':
@@ -101,13 +95,13 @@ class ChatbotController {
           responseModal = calendarResultModal(+type, schedules);
           break;
         case 'noti_on_off':
-          const result = await flipChatUserNoti(callbackInfo.react_user_id.toString(), callbackInfo.value);
+          const result = await flipChatUserNoti(callbackInfo.react_user_id.toString(), callbackInfo.actions.value);
           responseModal = userNotificationSelectResult(result.allowNotification);
           break;
         default:
           break;
       }
-
+	  
       kakaoWork.sendMessage({
         conversationId: callbackInfo.message.conversation_id,
         text: responseModal.text,

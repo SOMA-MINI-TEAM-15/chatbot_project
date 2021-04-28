@@ -15,7 +15,7 @@ export async function getChatUserById(userId: string): Promise<IChatUser> {
 
 export async function flipChatUserNoti(userId: string, value: string): Promise<IChatUser> {
   const targetUser = await ChatUser.findOne({ userId });
-  const targetValue = value === 'true' ? true : false;
+  const targetValue = value === 'noti_on' ? true : false;
 
   if (!targetUser) {
     return await ChatUser.create({ userId, allowNotification: targetValue });
