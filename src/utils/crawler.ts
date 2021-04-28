@@ -114,6 +114,48 @@ export async function fetchMentoringDetails(id: number): Promise<{ mentoringLoca
   return { mentoringLocation: root.querySelectorAll('div.c')[4].textContent.trim(), content: root.querySelector('div.cont').textContent.trim() };
 }
 
+export async function fetchMentoringByTypeAndQuery(type: string, query: string): Promise<IMentoring[]> {
+  let html: string;
+
+  switch (type) {
+    case 'title':
+      html = await getHtml(
+        `https://swmaestro.org/sw/mypage/mentoLec/list.do?pageIndex=1&menuNo=200046&searchAppGbTy=&searchCnd=1&searchWrd=${query}`,
+      );
+      break;
+    case 'writer':
+      html = await getHtml(
+        `https://swmaestro.org/sw/mypage/mentoLec/list.do?pageIndex=1&menuNo=200046&searchAppGbTy=&searchCnd=2&searchWrd=${query}`,
+      );
+      break;
+    case 'content':
+      html = await getHtml(
+        `https://swmaestro.org/sw/mypage/mentoLec/list.do?pageIndex=1&menuNo=200046&searchAppGbTy=&searchCnd=3&searchWrd=${query}`,
+      );
+      break;
+    default:
+      break;
+  }
+
+  const root = HTMLParser.parse(html);
+  const [trHeader, ...trs] = root.querySelectorAll('tr');
+  if (trs.length > 0 && trs[0].textContent.trim() === '데이터가 없습니다.') return [];
+  return trs.map(tr => {
+    const mentoring: IMentoring = {
+      id: parseInt(new URL(tr.querySelector('a').getAttribute('href'), 'https://www.swmaestro.org/').searchParams.get('qustnrSn')) || -1,
+      title: tr.querySelector('a').text.trim(),
+      state: tr.querySelector('td:nth-child(6)').textContent.trim(),
+      createdAt: new Date(tr.querySelector('td:nth-child(8)').textContent.trim()),
+      mentoringDate: new Date(tr.querySelector('td:nth-child(4)').textContent.trim()),
+      appliedCnt: parseInt(tr.querySelector('td:nth-child(5)').textContent.trim()),
+      writer: tr.querySelector('td:nth-child(7)').textContent.trim(),
+      applyStartDate: new Date(tr.querySelector('td:nth-child(3)').textContent.trim().split('~')[0].trim()),
+      applyEndDate: new Date(tr.querySelector('td:nth-child(3)').textContent.trim().split('~')[1].trim()),
+    };
+    return mentoring;
+  });
+}
+
 // 페이지 인덱스에 해당하는 멘토링 페이지의 멘토링들을 가져오는 함수(상세페이지 내용은 가져오지 않는다!)
 export async function fetchMentorings(pageIndex = 1): Promise<IMentoring[]> {
   if (pageIndex <= 0) pageIndex = 0;

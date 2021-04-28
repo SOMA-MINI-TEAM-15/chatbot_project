@@ -181,8 +181,8 @@ export const mentoringSearchRequestModal = () => {
   };
 };
 
-export const mentoringSearchResultModal = (mentoringInfo: IMentoring) => {
-  return {
+export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
+  const modal = {
     text: '멘토링 검색 결과',
     blocks: [
       {
@@ -190,12 +190,17 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring) => {
         text: '🔎 멘토링 검색 결과',
         style: 'blue',
       },
+    ],
+  };
+
+  for (const mentoring of mentoringInfo) {
+    modal.blocks.push(
       {
         type: 'description',
         term: '제목',
         content: {
           type: 'text',
-          text: mentoringInfo.title,
+          text: mentoring.title,
           markdown: false,
         },
         accent: true,
@@ -205,7 +210,7 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring) => {
         term: '작성자',
         content: {
           type: 'text',
-          text: mentoringInfo.writer,
+          text: mentoring.writer,
           markdown: false,
         },
         accent: true,
@@ -215,7 +220,7 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring) => {
         term: '접수기간',
         content: {
           type: 'text',
-          text: `${mentoringInfo.applyStartDate} ~ ${mentoringInfo.applyEndDate}`,
+          text: `${mentoring.applyStartDate} ~ ${mentoring.applyEndDate}`,
           markdown: false,
         },
         accent: true,
@@ -225,7 +230,7 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring) => {
         term: '상태',
         content: {
           type: 'text',
-          text: mentoringInfo.state,
+          text: mentoring.state,
           markdown: false,
         },
         accent: true,
@@ -235,18 +240,15 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring) => {
         term: '접수인원',
         content: {
           type: 'text',
-          text: mentoringInfo.appliedCnt,
+          text: mentoring.appliedCnt,
           markdown: false,
         },
         accent: true,
       },
-      // {
-      //   type: 'button',
-      //   text: '자세히 보기',
-      //   style: 'default',
-      // },
-    ],
-  };
+    );
+  }
+
+  return modal;
 };
 
 export const calendarRequestModal = () => {
