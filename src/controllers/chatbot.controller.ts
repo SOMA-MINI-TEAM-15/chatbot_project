@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { KakaoWorkCallbackInfo, KakaoWorkConversation, KakaoWorkRequestInfo, KakaoWorkUserInfo } from '../dtos/kakaowork.dto';
 import { IChatUser } from '../interfaces/soma.interface';
-import { fetchSomaUsers } from '../utils/crawler';
+import { fetchMentorings, fetchSomaUsers } from '../utils/crawler';
 import * as kakaoWork from '../utils/kakaowork';
 import {
   broadcastMessage,
@@ -71,14 +71,20 @@ class ChatbotController {
         case 'user_search':
           if (type === 'mento') {
             const somaMentor = await (await fetchSomaUsers('mentor')).filter(user => user.name === value)[0];
-            responseModal = userSearchResultModal(somaMentor.name, somaMentor.major.join(','));
+            responseModal = userSearchResultModal(somaMentor.name, somaMentor.major.join(',')).blocks;
           } else if (type === 'mentee') {
             const somaMentee = await (await fetchSomaUsers('mentee')).filter(user => user.name === value)[0];
-            responseModal = userSearchResultModal(somaMentee.name, somaMentee.major.join(','));
+            responseModal = userSearchResultModal(somaMentee.name, somaMentee.major.join(',')).blocks;
           }
           break;
         case 'mentoring_search':
-          // responseModal = mentoringSearchRequestModal();
+          // if (type === 'title') {
+
+          // } else if (type === 'content') {
+
+          // } else if (type === 'writer') {
+
+          // }
           break;
         case 'calendar':
           // const schedules = await fetchSchedules();
