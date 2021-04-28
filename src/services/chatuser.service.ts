@@ -1,4 +1,3 @@
-import HttpException from '../exceptions/HttpException';
 import { IChatUser } from '../interfaces/soma.interface';
 import { ChatUser } from '../models/chatuser.model';
 
@@ -14,14 +13,17 @@ export async function getChatUserById(userId: string): Promise<IChatUser> {
   return ChatUser.findOne({ userId });
 }
 
-export async function flipChatUserNoti(userId: string): Promise<IChatUser> {
+export async function flipChatUserNoti(userId: string, value: string): Promise<IChatUser> {
   const targetUser = await ChatUser.findOne({ userId });
+  const targetValue = value === 'true' ? true : false;
 
   if (!targetUser) {
-    return await ChatUser.create({ userId, allowNotification: false });
+    return await ChatUser.create({ userId, allowNotification: targetValue });
   }
 
-  return ChatUser.findOneAndUpdate({ userId }, { allowNotification: !targetUser.allowNotification }, { returnOriginal: false });
+  await ChatUser.updateOne({ userId }, { allowNotification: targetValue });
+  targetUser.allowNotification = !targetUser.allowNotification;
+  return targetUser;
 }
 
 // 주의: DB내 사용자 전체를 가져오는것이지 카카오 웍스 워크스페이스의 전체 사용자를 가져오는건 아님

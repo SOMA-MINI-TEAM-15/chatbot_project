@@ -9,11 +9,12 @@ import {
   broadcastMessage,
   calendarRequestModal,
   calendarResultModal,
-  filpUserNotiModal,
+  userNotificationSelectModal,
   mentoringSearchRequestModal,
   mentoringSearchResultModal,
   userSearchRequestModal,
   userSearchResultModal,
+  userNotificationSelectResult,
 } from '../utils/kakaowork.message';
 
 class ChatbotController {
@@ -49,9 +50,7 @@ class ChatbotController {
           responseModal = calendarRequestModal();
           break;
         case 'noti_on_off':
-          const result = await flipChatUserNoti(requestInfo.react_user_id.toString());
-          responseModal = filpUserNotiModal(result.allowNotification);
-          break;
+          responseModal = userNotificationSelectModal();
         default:
           break;
       }
@@ -102,8 +101,8 @@ class ChatbotController {
           responseModal = calendarResultModal(+type, schedules);
           break;
         case 'noti_on_off':
-          const result = await flipChatUserNoti(callbackInfo.react_user_id.toString());
-          responseModal = filpUserNotiModal(result.allowNotification);
+          const result = await flipChatUserNoti(callbackInfo.react_user_id.toString(), callbackInfo.value);
+          responseModal = userNotificationSelectResult(result.allowNotification);
           break;
         default:
           break;

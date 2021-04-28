@@ -377,25 +377,62 @@ export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
   return output;
 };
 
-export const filpUserNotiModal = (flip: boolean) => {
+export const userNotificationSelectModal = () => {
   return {
-    text: '알림 설정이 변경되었습니다.',
-    blocks: [
-      {
-        type: 'header',
-        text: '알림 설정이 완료되었습니다.',
-        style: 'blue',
-      },
-      {
-        type: 'description',
-        term: '변경값',
-        content: {
-          type: 'text',
-          text: flip === true ? '알림 ON' : '알림 OFF',
+    view: {
+      title: '알림 ON/OFF',
+      accept: '설정',
+      decline: '취소',
+      value: 'noti_on_off',
+      blocks: [
+        {
+          type: 'label',
+          text: '알림을 설정해주세요.',
           markdown: false,
         },
-        accent: true,
-      },
-    ],
+        {
+          type: 'select',
+          name: 'type',
+          required: true,
+          options: [
+            {
+              text: '켜기',
+              value: 'noti_on',
+            },
+            {
+              text: '끄기',
+              value: 'noti_off',
+            },
+          ],
+          placeholder: '알림',
+        },
+      ],
+    },
+  };
+};
+
+export const userNotificationSelectResult = (value: boolean) => {
+  return {
+    view: {
+      title: '알림 ON/OFF',
+      value: 'noti_on_off',
+      blocks: [
+        {
+          type: 'header',
+          text: `알림설정을 완료했습니다.`,
+          style: 'blue',
+        },
+        {
+          type: 'description',
+          term: '알림',
+          content: {
+            type: 'text',
+            text: `${value === true ? '켜기' : '끄기'}`,
+            markdown: false,
+          },
+          accent: true,
+        },
+      ],
+    },
   };
 };
