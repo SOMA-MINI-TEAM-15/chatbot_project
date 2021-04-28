@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { KakaoWorkCallbackInfo, KakaoWorkConversation, KakaoWorkRequestInfo, KakaoWorkUserInfo } from '../dtos/kakaowork.dto';
-import { IChatUser } from '../interfaces/soma.interface';
 import { ChatUser } from '../models/chatuser.model';
 import { flipChatUserNoti } from '../services/chatuser.service';
 import { getMentoringsByContent, getMentoringsByTitle, getMentoringsByWriter } from '../services/mentoring.service';
@@ -23,14 +22,18 @@ class ChatbotController {
   public sendNewLectureNotification = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       // 검증 필요
-      const users = (await kakaoWork.getUserList()) as KakaoWorkUserInfo[];
-      const dbUsers = await (await ChatUser.find()).map((user: IChatUser) => user.userId);
+      const users = await kakaoWork.getUserList();
+      const dbUsers = await (await ChatUser.find({ allowNotification: true })).map(user => user.userId);
       const conversations: KakaoWorkConversation[] = await Promise.all(
-        users.filter(user => dbUsers.includes(user.id)).map(user => kakaoWork.openConversations({ userId: user.id })),
+        users.filter(user => dbUsers.includes(user.id)).map((user: KakaoWorkUserInfo) => kakaoWork.openConversations({ userId: user.id })),
       );
 
-      const newMentoring = await fetchMentorings()[0];
-      const messages = await Promise.all([conversations.map(conversation => kakaoWork.sendMessage(newLectureModal(conversation.id, newMentoring)))]);
+      // 이미 바뀐것을 인지했으므로 다시 크롤링 하지 않도록 변경 필요
+      const newMentoring = await fetchMentorings(1);
+
+      const messages = await Promise.all([
+        conversations.map(conversation => kakaoWork.sendMessage(newLectureModal(conversation.id, newMentoring[0]))),
+      ]);
 
       res.status(200).json({ users, conversations, messages });
     } catch (error) {

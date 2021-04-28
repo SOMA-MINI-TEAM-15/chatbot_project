@@ -8,7 +8,6 @@ import { addMentoring, getMostRecentMentoring } from '../services/mentoring.serv
 import { promisify } from 'util';
 import * as fs from 'fs-extra';
 import { resolve } from 'path';
-import { logger } from './logger';
 
 export const sleepPromise = promisify(setTimeout);
 
