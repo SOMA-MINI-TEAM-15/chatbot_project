@@ -17,9 +17,30 @@ export const broadcastMessage = (conversationId: number) => {
       {
         type: 'button',
         action_type: 'call_modal',
-        value: 'selectMenu',
-        text: '챗봇 사용해보기',
-        style: 'default',
+        value: 'user_search',
+        text: '멘티/멘토 검색',
+        style: 'primary',
+      },
+      {
+        type: 'button',
+        action_type: 'call_modal',
+        value: 'mentoring_search',
+        text: '멘토링 검색',
+        style: 'primary',
+      },
+      {
+        type: 'button',
+        action_type: 'call_modal',
+        value: 'monthly',
+        text: '일정 확인하기',
+        style: 'primary',
+      },
+      {
+        type: 'button',
+        action_type: 'call_modal',
+        value: 'noti_on_off',
+        text: '신규 멘토링 알림 켜고 끄기',
+        style: 'primary',
       },
     ],
   };

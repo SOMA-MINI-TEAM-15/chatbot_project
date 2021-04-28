@@ -17,7 +17,7 @@ export const dbConnOpts = {
 export const connectMongoDb = async () => {
   const dbUri = process.env.MONGO_URI || (await memoryDb.getUri());
 
-  mongoose
+  await mongoose
     .connect(dbUri, dbConnOpts)
     .then(() => {
       logger.info(`*** Successfully connected database: ${dbUri}`);

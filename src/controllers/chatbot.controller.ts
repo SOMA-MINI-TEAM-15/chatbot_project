@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { KakaoWorkCallbackInfo, KakaoWorkConversation, KakaoWorkUserInfo } from '../dtos/kakaowork.dto';
+import { KakaoWorkCallbackInfo, KakaoWorkConversation, KakaoWorkRequestInfo, KakaoWorkUserInfo } from '../dtos/kakaowork.dto';
 import * as kakaoWork from '../utils/kakaowork';
 import { broadcastMessage } from '../utils/kakaowork.message';
 
@@ -23,6 +23,24 @@ class ChatbotController {
   public requestController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       // 최초 모달에서 기능을 요청했을 때 그에 맞는 모달 보내기
+
+      const requestinfo: KakaoWorkRequestInfo = req.body;
+
+      switch (requestinfo.value) {
+        case 'user_search':
+          console.log('user search pressed');
+          break;
+        case 'mentoring_search':
+          console.log('mentoring search pressed');
+          break;
+        case 'monthly':
+          console.log('monthly pressed');
+          break;
+        case 'noti_on_off':
+          console.log('on and off pressed');
+        default:
+          break;
+      }
 
       res.status(200).json({ message: 'request controller is alive ' });
     } catch (error) {
