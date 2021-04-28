@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { KakaoWorkCallbackInfo, KakaoWorkConversation, KakaoWorkRequestInfo, KakaoWorkUserInfo } from '../dtos/kakaowork.dto';
 import { IChatUser } from '../interfaces/soma.interface';
+import { ChatUser } from '../models/chatuser.model';
 import { flipChatUserNoti } from '../services/chatuser.service';
 import { getMentoringsByContent, getMentoringsByTitle, getMentoringsByWriter } from '../services/mentoring.service';
 import { fetchMentorings, fetchSchedules, fetchSomaUsers } from '../utils/crawler';
@@ -15,13 +16,31 @@ import {
   userSearchRequestModal,
   userSearchResultModal,
   userNotificationSelectResult,
+  newLectureModal,
 } from '../utils/kakaowork.message';
 
 class ChatbotController {
+  public sendNewLectureNotification = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      // 검증 필요
+      const users = (await kakaoWork.getUserList()) as KakaoWorkUserInfo[];
+      const dbUsers = await (await ChatUser.find()).map((user: IChatUser) => user.userId);
+      const conversations: KakaoWorkConversation[] = await Promise.all(
+        users.filter(user => dbUsers.includes(user.id)).map(user => kakaoWork.openConversations({ userId: user.id })),
+      );
+
+      const newMentoring = await fetchMentorings()[0];
+      const messages = await Promise.all([conversations.map(conversation => kakaoWork.sendMessage(newLectureModal(conversation.id, newMentoring)))]);
+
+      res.status(200).json({ users, conversations, messages });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public sendMessageToAllUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const users = await kakaoWork.getUserList();
-
       const conversations: KakaoWorkConversation[] = await Promise.all(
         users.map((user: KakaoWorkUserInfo) => kakaoWork.openConversations({ userId: user.id })),
       );
@@ -65,16 +84,16 @@ class ChatbotController {
     try {
       const callbackInfo: KakaoWorkCallbackInfo = req.body;
       const { type, value } = callbackInfo.actions;
-	  let responseModal;
-      
+      let responseModal;
+
       switch (callbackInfo.value) {
         case 'user_search':
           if (type === 'mento') {
-            const somaMentor = await (await fetchSomaUsers('mentor')).filter(user => user.name === value)[0];
-            responseModal = userSearchResultModal(somaMentor.name, type, somaMentor.major.join(', '));
+            const somaMentor = await (await fetchSomaUsers('mentor')).filter(user => user.name === value);
+            responseModal = userSearchResultModal(type, somaMentor);
           } else if (type === 'mentee') {
-            const somaMentee = await (await fetchSomaUsers('mentee')).filter(user => user.name === value)[0];
-            responseModal = userSearchResultModal(somaMentee.name, type, somaMentee.major.join(', '));
+            const somaMentee = await (await fetchSomaUsers('mentee')).filter(user => user?.name.includes(value));
+            responseModal = userSearchResultModal(type, somaMentee);
           }
           break;
         case 'mentoring_search':
@@ -101,7 +120,9 @@ class ChatbotController {
         default:
           break;
       }
-	  
+
+      console.log(responseModal);
+
       kakaoWork.sendMessage({
         conversationId: callbackInfo.message.conversation_id,
         text: responseModal.text,

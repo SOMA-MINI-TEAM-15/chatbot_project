@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { IMentoring, ISchedule } from '../interfaces/soma.interface';
+import { IMentoring, ISchedule, ISomaUser } from '../interfaces/soma.interface';
 
 export const broadcastMessage = (conversationId: number) => {
   return {
@@ -14,7 +14,7 @@ export const broadcastMessage = (conversationId: number) => {
       {
         type: 'text',
         text:
-          '저희 15팀은 소마를 진행하면서 자유멘토링에 어려움을 겪은 여러분을 위해 솔루션을 제공하려 합니다!\n미니 프로젝트 평가가 끝나더라도 계속 사용할 수 있는 챗봇이니 많이 사용해주세요 :)',
+          '저희 15팀은 소마를 진행하면서 예비멘토링 기간에 어려움을 겪은 여러분을 위해 솔루션을 제공하려 합니다!\n미니 프로젝트 평가가 끝나더라도 계속 사용할 수 있는 챗봇이니 많이 사용해주세요 :)',
         markdown: true,
       },
       {
@@ -44,6 +44,50 @@ export const broadcastMessage = (conversationId: number) => {
         value: 'noti_on_off',
         text: '신규 멘토링 알림 켜고 끄기',
         style: 'primary',
+      },
+    ],
+  };
+};
+
+export const newLectureModal = (conversationId, mentoring: IMentoring) => {
+  return {
+    conversationId,
+    text: '새로운 멘토링 등록',
+    blocks: [
+      {
+        type: 'header',
+        text: '새로운 멘토링이 등록되었습니다.',
+        style: 'yellow',
+      },
+      {
+        type: 'description',
+        term: '제목',
+        content: {
+          type: 'text',
+          text: mentoring.title,
+          markdown: false,
+        },
+        accent: true,
+      },
+      {
+        type: 'description',
+        term: '작성자',
+        content: {
+          type: 'text',
+          text: mentoring.writer,
+          markdown: false,
+        },
+        accent: true,
+      },
+      {
+        type: 'description',
+        term: '접수기간',
+        content: {
+          type: 'text',
+          text: `${dayjs(mentoring.applyStartDate).format('YYYY-MM-DD')} ~ ${dayjs(mentoring.applyEndDate).format('YYYY-MM-DD')}`,
+          markdown: false,
+        },
+        accent: true,
       },
     ],
   };
@@ -94,8 +138,8 @@ export const userSearchRequestModal = () => {
   };
 };
 
-export const userSearchResultModal = (name: string, type: string, skills: string) => {
-  return {
+export const userSearchResultModal = (type: string, users: ISomaUser[]) => {
+  const result = {
     text: `${type === 'mentee' ? '멘티' : '멘토'} 검색 결과`,
     blocks: [
       {
@@ -103,12 +147,32 @@ export const userSearchResultModal = (name: string, type: string, skills: string
         text: `🔎 ${type === 'mentee' ? '멘티' : '멘토'} 검색 결과`,
         style: 'blue',
       },
+    ],
+  };
+
+  if (!users) {
+    result.blocks.push({
+      type: 'description',
+      term: '이름',
+      content: {
+        type: 'text',
+        text: '존재하지 않음',
+        markdown: false,
+      },
+      accent: true,
+    });
+
+    return result;
+  }
+
+  for (const user of users) {
+    result.blocks.push(
       {
         type: 'description',
         term: '이름',
         content: {
           type: 'text',
-          text: name,
+          text: user.name,
           markdown: false,
         },
         accent: true,
@@ -118,18 +182,18 @@ export const userSearchResultModal = (name: string, type: string, skills: string
         term: '관심기술',
         content: {
           type: 'text',
-          text: skills,
+          text: user?.major.join(', '),
           markdown: false,
         },
         accent: true,
       },
       {
-        type: 'button',
-        text: '자세히 보기',
-        style: 'default',
+        type: 'divider',
       },
-    ],
-  };
+    );
+  }
+
+  return result;
 };
 
 export const mentoringSearchRequestModal = () => {
@@ -187,11 +251,26 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
     blocks: [
       {
         type: 'header',
-        text: '🔎 멘토링 검색 결과',
+        text: '🔎 멘토링 검색 결과(최신 3개)',
         style: 'blue',
       },
     ],
   };
+
+  if (mentoringInfo.length === 0) {
+    modal.blocks.push({
+      type: 'description',
+      term: '메세지',
+      content: {
+        type: 'text',
+        text: '존재하지 않습니다.',
+        markdown: false,
+      },
+      accent: true,
+    });
+
+    return modal;
+  }
 
   if (mentoringInfo.length > 3) {
     mentoringInfo = mentoringInfo.slice(0, 3);
@@ -413,23 +492,23 @@ export const userNotificationSelectModal = () => {
 
 export const userNotificationSelectResult = (value: boolean) => {
   return {
-	text: '알림 ON/OFF',
-	blocks: [
-        {
-          type: 'header',
-          text: `알림설정을 완료했습니다.`,
-          style: 'blue',
+    text: '알림 ON/OFF',
+    blocks: [
+      {
+        type: 'header',
+        text: `알림설정을 완료했습니다.`,
+        style: 'blue',
+      },
+      {
+        type: 'description',
+        term: '알림',
+        content: {
+          type: 'text',
+          text: `${value === true ? '켜기' : '끄기'}`,
+          markdown: false,
         },
-        {
-          type: 'description',
-          term: '알림',
-          content: {
-            type: 'text',
-            text: `${value === true ? '켜기' : '끄기'}`,
-            markdown: false,
-          },
-          accent: true,
-        },
-      ],
-	};
+        accent: true,
+      },
+    ],
+  };
 };
