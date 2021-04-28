@@ -2,14 +2,14 @@ import puppeteer from 'puppeteer';
 import { URL } from 'url';
 import * as HTMLParser from 'node-html-parser';
 import { Lock } from './lock';
-import { IMentoring, ISchedule } from '../interfaces/soma.interface';
+import { IMentoring, ISchedule, ISomaUser } from '../interfaces/soma.interface';
 import EventEmitter from 'events';
 import { addMentoring, getMostRecentMentoring } from '../services/mentoring.service';
 import { promisify } from 'util';
 import * as fs from 'fs-extra';
 import { resolve } from 'path';
 
-const sleepPromise = promisify(setTimeout);
+export const sleepPromise = promisify(setTimeout);
 
 const eventEmitter: EventEmitter = new EventEmitter();
 let browser: puppeteer.Browser = null;
@@ -38,7 +38,6 @@ export async function initialize(): Promise<void> {
     setTimeout(startCheckingNewMentoringsRoutine, 2000);
   }
 
-  //TODO: 불필요한 리소스 막기(img, font, css?)
   console.log('initialize complete!');
 }
 
@@ -47,18 +46,26 @@ async function startCheckingNewMentoringsRoutine() {
   const rescentLocalMentoring = await getMostRecentMentoring();
   const rescentOnlineMentoring = (await fetchMentorings())[0];
   if (rescentOnlineMentoring && rescentLocalMentoring && rescentOnlineMentoring.id > rescentLocalMentoring.id) {
+    console.log('new Mentoring exists');
     const newMentorings: IMentoring[] = [];
+    let i = 1;
     while (true) {
-      const i = 1;
-      const mentorings = await fetchMentorings(i);
+      const mentorings = await fetchMentorings(i++);
       const newMentoringsPartial = mentorings.filter(m => m.id > rescentLocalMentoring.id);
-      if (newMentorings.length == 0) break;
+      if (newMentoringsPartial.length === 0) break;
       newMentoringsPartial.forEach(m => newMentorings.push(m));
     }
+    console.log(`total ${newMentorings.length} new Mentorings`);
     for (const newMentoring of newMentorings) {
+      const { content, mentoringLocation } = await fetchMentoringDetails(newMentoring.id);
+      newMentoring.content = content;
+      newMentoring.mentoringLocation = mentoringLocation;
       await addMentoring(newMentoring);
+      console.log(`new mentoring: ${newMentoring.id}`);
       eventEmitter.emit('new_mentoring', newMentoring);
     }
+  } else {
+    console.log('no new Mentorings');
   }
   setTimeout(startCheckingNewMentoringsRoutine, 60 * 1000);
 }
@@ -100,8 +107,10 @@ export async function login(): Promise<boolean> {
 }
 
 // 멘토링 id에 해당하는 멘토링 정보를 멘토링 상세 페이지까지 접속해서 가져오는 함수
-export async function fetchMentoringWithDetails(id: string): Promise<IMentoring> {
-  return null;
+export async function fetchMentoringDetails(id: number): Promise<{ mentoringLocation: string; content: string }> {
+  const html: string = await getHtml(`https://www.swmaestro.org/sw/mypage/mentoLec/view.do?qustnrSn=${id}&menuNo=200046`);
+  const root = HTMLParser.parse(html);
+  return { mentoringLocation: root.querySelectorAll('div.c')[4].textContent.trim(), content: root.querySelector('div.cont').textContent.trim() };
 }
 
 // 페이지 인덱스에 해당하는 멘토링 페이지의 멘토링들을 가져오는 함수(상세페이지 내용은 가져오지 않는다!)
@@ -127,12 +136,56 @@ export async function fetchMentorings(pageIndex = 1): Promise<IMentoring[]> {
   });
 }
 
-// 원하는 년도/월의 일정을 가져오는 함수
-export async function fetchSchedules(year = 2021, month = 4): Promise<ISchedule[]> {
-  return null;
+// 사용자 이름, 관심기술을 가져오는 함수
+export async function fetchSomaUsers(userType: 'mentee' | 'mentor' = 'mentee'): Promise<ISomaUser[]> {
+  const urls = {
+    mentee: 'https://www.swmaestro.org/sw/mypage/myTeam/teamList.do?viewType=CONTBODY&pUserGb=C',
+    mentor: 'https://www.swmaestro.org/sw/mypage/myTeam/teamList.do?viewType=CONTBODY&pUserGb=T',
+  };
+
+  const html: string = await getHtml(urls[userType]);
+  const root = HTMLParser.parse(html);
+  const [trHeader, ...trs] = root.querySelectorAll('tr');
+  if (trs.length > 0 && trs[0].textContent.trim() === '검색 결과가 없습니다.') return [];
+  return trs.map(tr => {
+    const name = tr.querySelector('td:nth-child(2)').textContent.trim();
+    const majorString = tr.querySelector('td:nth-child(4)').textContent.trim();
+    const major = majorString
+      ? tr
+          .querySelector('td:nth-child(4)')
+          .textContent.trim()
+          .split(',')
+          .map(m => m.trim())
+      : [];
+    const user: ISomaUser = {
+      name,
+      major,
+      userType,
+    };
+    return user;
+  });
 }
 
-// 사용 금지
+// 원하는 년도/월의 일정을 가져오는 함수
+export async function fetchSchedules(year = 2021, month = 4): Promise<ISchedule[]> {
+  const html: string = await getHtml(
+    `https://www.swmaestro.org/sw/mypage/schedule/list.do?menuNo=200043&sYear=${year}&sMonth=${month < 10 ? `0${month}` : month}`,
+  );
+  const root = HTMLParser.parse(html);
+  const [trHeader, ...trs] = root.querySelectorAll('tr');
+  if (trs.length > 0 && trs[0].textContent.trim() === '일정이 없습니다.') return [];
+  return trs.map(tr => {
+    const schedule: ISchedule = {
+      title: tr.querySelector('div.rel').childNodes[0].textContent.trim(),
+      classification: tr.querySelector('td:nth-child(3)').textContent.trim(),
+      startDate: new Date(tr.querySelector('td:nth-child(2)').textContent.trim().split('~')[0]),
+      endDate: new Date(tr.querySelector('td:nth-child(2)').textContent.trim().split('~')[1]),
+    };
+    return schedule;
+  });
+}
+
+// 아래 함수들은 사용 금지
 async function fetchAllMentorings(): Promise<IMentoring[]> {
   let i = 1;
   const retMentorings: IMentoring[] = [];
@@ -147,7 +200,6 @@ async function fetchAllMentorings(): Promise<IMentoring[]> {
   return retMentorings;
 }
 
-// 사용 금지
 async function saveAllMentorings(): Promise<void> {
   const ret = await fetchAllMentorings();
   const saveDir = resolve('/workspaces/chatbot_project/data', 'mentorings.json');
