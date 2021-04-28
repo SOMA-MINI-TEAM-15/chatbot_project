@@ -11,7 +11,7 @@ import { resolve } from 'path';
 
 export const sleepPromise = promisify(setTimeout);
 
-const eventEmitter: EventEmitter = new EventEmitter();
+export const eventEmitter: EventEmitter = new EventEmitter();
 let browser: puppeteer.Browser = null;
 let page: puppeteer.Page = null;
 const lock = new Lock();
