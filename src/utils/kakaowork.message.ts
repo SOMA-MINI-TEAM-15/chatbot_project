@@ -376,3 +376,26 @@ export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
 
   return output;
 };
+
+export const filpUserNotiModal = (flip: boolean) => {
+  return {
+    text: '알림 설정이 변경되었습니다.',
+    blocks: [
+      {
+        type: 'header',
+        text: '알림 설정이 완료되었습니다.',
+        style: 'blue',
+      },
+      {
+        type: 'description',
+        term: '변경값',
+        content: {
+          type: 'text',
+          text: flip === true ? '알림 ON' : '알림 OFF',
+          markdown: false,
+        },
+        accent: true,
+      },
+    ],
+  };
+};

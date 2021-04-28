@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { KakaoWorkCallbackInfo, KakaoWorkConversation, KakaoWorkRequestInfo, KakaoWorkUserInfo } from '../dtos/kakaowork.dto';
 import { IChatUser } from '../interfaces/soma.interface';
+import { flipChatUserNoti } from '../services/chatuser.service';
 import { getMentoringsByContent, getMentoringsByTitle, getMentoringsByWriter } from '../services/mentoring.service';
 import { fetchMentorings, fetchSchedules, fetchSomaUsers } from '../utils/crawler';
 import * as kakaoWork from '../utils/kakaowork';
@@ -8,6 +9,7 @@ import {
   broadcastMessage,
   calendarRequestModal,
   calendarResultModal,
+  filpUserNotiModal,
   mentoringSearchRequestModal,
   mentoringSearchResultModal,
   userSearchRequestModal,
@@ -47,7 +49,9 @@ class ChatbotController {
           responseModal = calendarRequestModal();
           break;
         case 'noti_on_off':
-          console.log('on and off pressed');
+          const result = await flipChatUserNoti(requestInfo.react_user_id.toString());
+          responseModal = filpUserNotiModal(result.allowNotification);
+          break;
         default:
           break;
       }
@@ -98,7 +102,9 @@ class ChatbotController {
           responseModal = calendarResultModal(+type, schedules);
           break;
         case 'noti_on_off':
-          console.log('on and off pressed');
+          const result = await flipChatUserNoti(callbackInfo.react_user_id.toString());
+          responseModal = filpUserNotiModal(result.allowNotification);
+          break;
         default:
           break;
       }
