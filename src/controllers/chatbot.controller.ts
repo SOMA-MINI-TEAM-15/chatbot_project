@@ -40,6 +40,28 @@ class ChatbotController {
     }
   };
 
+  public sendMessageToTeam15 = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const users = await kakaoWork.getTeam15UserList();
+      const dbUsers = await (await getChatUsers()).map(user => user.userId);
+      const conversations: KakaoWorkConversation[] = await Promise.all(
+        users.map((user: KakaoWorkUserInfo) => {
+          if (!dbUsers.includes(user.id)) {
+            addChatUser({ userId: user.id, allowNotification: true });
+          }
+
+          return kakaoWork.openConversations({ userId: user.id });
+        }),
+      );
+
+      const messages = await Promise.all([conversations.map(conversation => kakaoWork.sendMessage(broadcastMessage(conversation.id)))]);
+
+      res.status(200).json({ users, conversations, messages });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public requestController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const requestInfo: KakaoWorkRequestInfo = req.body;
