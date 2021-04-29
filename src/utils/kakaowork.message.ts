@@ -163,7 +163,7 @@ export const userSearchResultModal = (type: string, users: ISomaUser[]) => {
       term: '메세지',
       content: {
         type: 'text',
-        text: '존재하지 않습니다.',
+        text: '존재하지 않아요.',
         markdown: false,
       },
       accent: true,
@@ -277,7 +277,7 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
       term: '메세지',
       content: {
         type: 'text',
-        text: '존재하지 않습니다.',
+        text: '존재하지 않아요.',
         markdown: false,
       },
       accent: true,
@@ -451,7 +451,18 @@ export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
     ],
   };
 
-  if (!schedules) {
+  if (schedules.length === 0) {
+    modal.blocks.push({
+      type: 'description',
+      term: '메세지',
+      content: {
+        type: 'text',
+        text: `${month}월에는 등록된 일정이 없어요.`,
+        markdown: false,
+      },
+      accent: true,
+    });
+
     return modal;
   }
 
@@ -538,7 +549,7 @@ export const userNotificationSelectResult = (value: boolean) => {
     blocks: [
       {
         type: 'header',
-        text: '*💡 알림설정을 완료했습니다.*',
+        text: '💡 알림설정을 완료했어요.',
         style: 'blue',
       },
       {
