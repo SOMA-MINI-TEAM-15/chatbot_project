@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { KakaoWorkCallbackInfo, KakaoWorkConversation, KakaoWorkRequestInfo, KakaoWorkUserInfo } from '../dtos/kakaowork.dto';
 import { addChatUser, flipChatUserNoti, getChatUsers } from '../services/chatuser.service';
 import { getMentoringsByContent, getMentoringsByTitle, getMentoringsByWriter } from '../services/mentoring.service';
-import { fetchSchedules, fetchSomaUsers } from '../utils/crawler';
+import { fetchSchedules, fetchSomaUsers, sleepPromise } from '../utils/crawler';
 import * as kakaoWork from '../utils/kakaowork';
 import {
   broadcastMessage,
@@ -117,6 +117,7 @@ class ChatbotController {
 
       res.status(200).json(responseModal);
 
+      await sleepPromise(2500);
       const menuModal = reRequestModal(callbackInfo.message.conversation_id);
       await kakaoWork.sendMessage({
         conversationId: callbackInfo.message.conversation_id,
