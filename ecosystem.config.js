@@ -10,7 +10,7 @@ module.exports = {
         NODE_ENV: 'production',
       },
       watch: ['build'],
-      ignore_watch: ['node_modules', 'src/logs'],
+      ignore_watch: ['node_modules', 'src/logs', 'build'],
       watch_delay: 1000,
     },
   ],

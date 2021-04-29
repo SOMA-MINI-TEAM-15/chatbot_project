@@ -2,7 +2,7 @@ import { KakaoWorkConversation, KakaoWorkUserInfo } from '../dtos/kakaowork.dto'
 import { IMentoring } from '../interfaces/soma.interface';
 import { ChatUser } from '../models/chatuser.model';
 import { Mentoring } from '../models/mentoring.model';
-import { fetchMentoringByTypeAndQuery, fetchMentorings } from '../utils/crawler';
+import { fetchMentoringByTypeAndQuery } from '../utils/crawler';
 import * as Kakaowork from '../utils/kakaowork';
 import { newLectureModal } from '../utils/kakaowork.message';
 

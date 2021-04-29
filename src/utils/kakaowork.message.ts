@@ -150,13 +150,13 @@ export const userSearchResultModal = (type: string, users: ISomaUser[]) => {
     ],
   };
 
-  if (!users) {
+  if (users.length === 0) {
     modal.blocks.push({
       type: 'description',
-      term: '이름',
+      term: '메세지',
       content: {
         type: 'text',
-        text: '존재하지 않음',
+        text: '존재하지 않습니다.',
         markdown: false,
       },
       accent: true,
@@ -165,7 +165,7 @@ export const userSearchResultModal = (type: string, users: ISomaUser[]) => {
     return modal;
   }
 
-  for (const user of users) {
+  for (const [index, user] of users.entries()) {
     modal.blocks.push(
       {
         type: 'description',
@@ -187,10 +187,13 @@ export const userSearchResultModal = (type: string, users: ISomaUser[]) => {
         },
         accent: true,
       },
-      {
-        type: 'divider',
-      },
     );
+
+    if (index !== users.length - 1) {
+      modal.blocks.push({
+        type: 'divider',
+      });
+    }
   }
 
   return modal;
@@ -276,7 +279,7 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
     mentoringInfo = mentoringInfo.slice(0, 3);
   }
 
-  for (const mentoring of mentoringInfo) {
+  for (const [index, mentoring] of mentoringInfo.entries()) {
     modal.blocks.push(
       {
         type: 'description',
@@ -294,6 +297,16 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
         content: {
           type: 'text',
           text: mentoring.writer,
+          markdown: false,
+        },
+        accent: true,
+      },
+      {
+        type: 'description',
+        term: '특강일',
+        content: {
+          type: 'text',
+          text: `${dayjs(mentoring.mentoringDate).format('YYYY-MM-DD')}`,
           markdown: false,
         },
         accent: true,
@@ -328,10 +341,12 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
         },
         accent: true,
       },
-      {
-        type: 'divider',
-      },
     );
+    if (index !== mentoringInfo.length - 1) {
+      modal.blocks.push({
+        type: 'divider',
+      });
+    }
   }
 
   return modal;
@@ -415,7 +430,7 @@ export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
     return modal;
   }
 
-  for (const schedule of schedules) {
+  for (const [index, schedule] of schedules.entries()) {
     modal.blocks.push(
       {
         type: 'description',
@@ -447,10 +462,12 @@ export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
         },
         accent: true,
       },
-      {
-        type: 'divider',
-      },
     );
+    if (index !== schedules.length - 1) {
+      modal.blocks.push({
+        type: 'divider',
+      });
+    }
   }
 
   return modal;
