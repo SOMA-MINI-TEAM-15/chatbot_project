@@ -8,7 +8,13 @@ export const broadcastMessage = (conversationId: number) => {
     blocks: [
       {
         type: 'image_link',
-        url: 'https://i.ibb.co/BtdSwL9/2.png',
+        url: 'https://i.ibb.co/z8nnny6/chatbot-title.png',
+      },
+      {
+        type: 'text',
+        text:
+          '*SWM Bot*',
+        markdown: true,
       },
       {
         type: 'text',
@@ -54,13 +60,13 @@ export const newLectureModal = (conversationId, mentoring: IMentoring) => {
     text: '신규 멘토링 알림',
     blocks: [
       {
-        type: "image_link",
-        url: "https://i.ibb.co/ZJzyjH8/image.png"
+        type: 'image_link',
+        url: 'https://i.ibb.co/hyfnyhs/image.png',
       },
       {
-        type: "text",
-        text: "*신규 멘토링이 등록되었습니다!*",
-        markdown: true
+        type: 'text',
+        text: '*💡 신규 멘토링이 등록되었습니다!*',
+        markdown: true,
       },
       {
         type: 'description',
@@ -88,6 +94,26 @@ export const newLectureModal = (conversationId, mentoring: IMentoring) => {
         content: {
           type: 'text',
           text: `${dayjs(mentoring.applyStartDate).format('YYYY-MM-DD')} ~ ${dayjs(mentoring.applyEndDate).format('YYYY-MM-DD')}`,
+          markdown: false,
+        },
+        accent: true,
+      },
+      {
+        type: 'description',
+        term: '특강일',
+        content: {
+          type: 'text',
+          text: `${dayjs(mentoring.mentoringDate).format('YYYY-MM-DD')}`,
+          markdown: false,
+        },
+        accent: true,
+      },
+      {
+        type: 'description',
+        term: '장소',
+        content: {
+          type: 'text',
+          text: mentoring.mentoringLocation,
           markdown: false,
         },
         accent: true,
@@ -151,8 +177,8 @@ export const userSearchResultModal = (type: string, users: ISomaUser[]) => {
         style: 'blue',
       },
       {
-        "type": "image_link",
-        "url": "https://i.ibb.co/yRYRpsL/kobu-agency-7okk-Fhxrx-Nw-unsplash.png"
+        type: 'image_link',
+        url: 'https://i.ibb.co/yRYRpsL/kobu-agency-7okk-Fhxrx-Nw-unsplash.png',
       },
     ],
   };
@@ -265,8 +291,8 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
         style: 'blue',
       },
       {
-        "type": "image_link",
-        "url": "https://i.ibb.co/crYD9DJ/robin-worrall-Q8-Hfu-O9udts-unsplash.png"
+        type: 'image_link',
+        url: 'https://i.ibb.co/LN3TLNF/photo-1552581234-26160f608093.jpg',
       },
     ],
   };
@@ -318,6 +344,16 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
         content: {
           type: 'text',
           text: `${dayjs(mentoring.mentoringDate).format('YYYY-MM-DD')}`,
+          markdown: false,
+        },
+        accent: true,
+      },
+      {
+        type: 'description',
+        term: '장소',
+        content: {
+          type: 'text',
+          text: mentoring.mentoringLocation,
           markdown: false,
         },
         accent: true,
@@ -435,8 +471,8 @@ export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
         style: 'blue',
       },
       {
-        "type": "image_link",
-        "url": "https://i.ibb.co/VBZSzCr/behnam-norouzi-F32j-Py9-SMaw-unsplash.png"
+        type: 'image_link',
+        url: 'https://i.ibb.co/VBZSzCr/behnam-norouzi-F32j-Py9-SMaw-unsplash.png',
       },
     ],
   };
@@ -527,12 +563,12 @@ export const userNotificationSelectResult = (value: boolean) => {
     text: '알림 ON/OFF',
     blocks: [
       {
-        type: "header",
-        text: "*💡 알림설정을 완료했습니다.*",
-        style: "blue",
+        type: 'header',
+        text: '*💡 알림설정을 완료했습니다.*',
+        style: 'blue',
       },
       {
-        type: "divider"
+        type: 'divider',
       },
       {
         type: 'description',
@@ -543,6 +579,59 @@ export const userNotificationSelectResult = (value: boolean) => {
           markdown: false,
         },
         accent: true,
+      },
+    ],
+  };
+};
+
+export const reRequestModal = (conversationId: number) => {
+  return {
+    conversationId,
+    text: '저어희는 크롤링을 하겠습니다. 거기에 소마를 곁들인',
+    blocks: [
+      {
+        type: 'image_link',
+        url: 'https://i.ibb.co/z8nnny6/chatbot-title.png',
+      },
+      {
+        type: 'text',
+        text:
+          '*SWM Bot*',
+        markdown: true,
+      },
+      {
+        type: 'text',
+        text:
+          '저희 15팀은 소마를 진행하면서 예비멘토링 기간에 어려움을 겪은 여러분을 위해 솔루션을 제공하려 합니다!\n미니 프로젝트 평가가 끝나더라도 계속 사용할 수 있는 챗봇이니 많이 사용해주세요 :)',
+        markdown: true,
+      },
+      {
+        type: 'button',
+        action_type: 'call_modal',
+        value: 'user_search',
+        text: '👩‍👦 멘티/멘토 검색',
+        style: 'primary',
+      },
+      {
+        type: 'button',
+        action_type: 'call_modal',
+        value: 'mentoring_search',
+        text: '🔎 멘토링 검색',
+        style: 'primary',
+      },
+      {
+        type: 'button',
+        action_type: 'call_modal',
+        value: 'calendar',
+        text: '📅 일정 확인',
+        style: 'primary',
+      },
+      {
+        type: 'button',
+        action_type: 'call_modal',
+        value: 'noti_on_off',
+        text: '💡 신규 멘토링 알림 켜고 끄기',
+        style: 'primary',
       },
     ],
   };
