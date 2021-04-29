@@ -578,9 +578,6 @@ export const userNotificationSelectResult = (value: boolean) => {
         style: 'blue',
       },
       {
-        type: 'divider',
-      },
-      {
         type: 'description',
         term: '알림',
         content: {
