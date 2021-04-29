@@ -1,6 +1,6 @@
 <h4 align="center"> 
 
-  ![logo](https://i.ibb.co/zHVB6DY/readme-logo.png)
+  ![logo](img/Title.png)
   
   > 소프트웨어 마에스트로 유저 검색과 멘토링 알림 챗봇
 
