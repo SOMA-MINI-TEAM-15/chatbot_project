@@ -17,13 +17,17 @@
 
 ## 🚩 Table of Contents
 
-- [🚩 Table of Contents](#-table-of-contents)
-- [🤖 About](#-about)
-  - [🥚 기획 계기](#-기획-계기)
-  - [🏷️ 우리 SWM Bot은요!](#️-우리-swm-bot은요)
-- [🏃 이제 한 번 사용해 볼까요?](#-이제-한-번-사용해-볼까요)
-- [☕ Developers(by ㄱㄴㄷ order)](#-developersby-ㄱㄴㄷ-order)
-- [🕒 README History](#-readme-history)
+- [🤖 About](#robot-about)
+  - [🥚 기획 계기](#egg-기획-계기)
+  - [🏷️ 우리 SWM Bot은요!](#label-우리-swm-bot은요)
+- [🏃 이제 한 번 사용해 볼까요?](#runner-이제-한-번-사용해-볼까요)
+  - [🗺️ 인트로 메세지](#world_map-인트로-메세지)
+  - [👩‍👦 멘티/멘토 검색](#family_woman_boy-멘티멘토-검색)
+  - [📅 일정 확인](#date-일정-확인)
+  - [🔎 멘토링 검색](#mag_right-멘토링-검색)
+  - [💡 신규 멘토링 알림](#bulb-신규-멘토링-알림)
+- [☕ Developers(by ㄱㄴㄷ order)](#coffee-developersby-ㄱㄴㄷ-order)
+- [🕒 README History](#clock3-readme-history)
 
 
 <br/>
@@ -40,17 +44,17 @@
 
 **좀 더 편리**하게 확인할 방법이 없을지 고민하게 되었고, 
 
-<u>**SWM Bot(가칭)**</u>이 탄생하게 되었습니다!
+<u>**SWM Bot**</u>이 탄생하게 되었습니다!
 
 <br/>
 
 ### 🏷️ 우리 SWM Bot은요!
 
-SWM Bot(가칭)은 12기 연수생 여러분들의 **성공적인 수료에 보탬**을 드리기 위한 봇 입니다.
+SWM Bot은 12기 연수생 여러분들의 **성공적인 수료에 보탬**을 드리기 위한 봇 입니다.
 
 <br/>
 
-SWM Bot(가칭)은 SWM 웹사이트에 접속해서 로그인을 하고 마이페이지에 들어가서 
+SWM Bot은 SWM 웹사이트에 접속해서 로그인을 하고 마이페이지에 들어가서 
 
 각종 정보를 확인해야하는 과정을 단순화시켜 
 
@@ -58,7 +62,7 @@ SWM Bot(가칭)은 SWM 웹사이트에 접속해서 로그인을 하고 마이�
 
 <br/>
 
-여러분은 SWM Bot(가칭)으로
+여러분은 SWM Bot으로
 
 **멘토/멘티를 검색할 수 있고,**
 
@@ -74,7 +78,7 @@ SWM Bot(가칭)은 SWM 웹사이트에 접속해서 로그인을 하고 마이�
 
 <br/>
 
-저희 SWM bot(가칭)을 좀 더 소개해드리자면
+저희 SWM bot을 좀 더 소개해드리자면
 
 
 - SWM 정보를 얻기위해 <u>웹사이트에 접속하지 않아도 됩니다</u>
@@ -88,9 +92,9 @@ SWM Bot(가칭)은 SWM 웹사이트에 접속해서 로그인을 하고 마이�
 
 <br/>
 
-어떠신가요? SWM bot(가칭)을 사용할 준비가 되셨나요?
+어떠신가요? SWM bot을 사용할 준비가 되셨나요?
 
-**수료를 향해 나아가는 여러분의 길에 SWM bot(가칭)이 함께 하겠습니다!**
+**수료를 향해 나아가는 여러분의 길에 SWM bot이 함께 하겠습니다!**
 
 <br/>
 
