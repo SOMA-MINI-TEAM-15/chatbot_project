@@ -220,7 +220,7 @@ export async function fetchSchedules(year = 2021, month = 4): Promise<ISchedule[
   if (trs.length > 0 && trs[0].textContent.trim() === '일정이 없습니다.') return [];
   return trs.map(tr => {
     const schedule: ISchedule = {
-      title: tr.querySelector('div.rel').childNodes[0].textContent.trim(),
+      title: tr.querySelector('div.rel').childNodes[0].textContent.trim().replace(/&amp;/g, '&'),
       classification: tr.querySelector('td:nth-child(3)').textContent.trim(),
       startDate: new Date(tr.querySelector('td:nth-child(2)').textContent.trim().split('~')[0]),
       endDate: new Date(tr.querySelector('td:nth-child(2)').textContent.trim().split('~')[1]),
