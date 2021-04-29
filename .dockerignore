@@ -6,3 +6,5 @@ Dockerfile
 Dockerfile.dev
 
 *.env
+
+src/logs
