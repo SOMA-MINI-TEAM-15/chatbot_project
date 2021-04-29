@@ -4,7 +4,7 @@ import * as HTMLParser from 'node-html-parser';
 import { Lock } from './lock';
 import { IMentoring, ISchedule, ISomaUser } from '../interfaces/soma.interface';
 import EventEmitter from 'events';
-import { addMentoring, getMostRecentMentoring } from '../services/mentoring.service';
+import { addMentoring, getMostRecentMentoring, sendNewMentoringNotification } from '../services/mentoring.service';
 import { promisify } from 'util';
 import * as fs from 'fs-extra';
 import { resolve } from 'path';
@@ -62,7 +62,8 @@ async function startCheckingNewMentoringsRoutine() {
       newMentoring.mentoringLocation = mentoringLocation;
       await addMentoring(newMentoring);
       console.log(`new mentoring: ${newMentoring.id}`);
-      eventEmitter.emit('new_mentoring', newMentoring);
+      sendNewMentoringNotification(newMentoring);
+      // eventEmitter.emit('new_mentoring', newMentoring);
     }
   } else {
     console.log('no new Mentorings');
