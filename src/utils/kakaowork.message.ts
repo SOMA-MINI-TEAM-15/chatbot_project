@@ -54,13 +54,13 @@ export const newLectureModal = (conversationId, mentoring: IMentoring) => {
     text: '신규 멘토링 알림',
     blocks: [
       {
-        type: "image_link",
-        url: "https://i.ibb.co/ZJzyjH8/image.png"
+        type: 'image_link',
+        url: 'https://i.ibb.co/ZJzyjH8/image.png',
       },
       {
-        type: "text",
-        text: "*신규 멘토링이 등록되었습니다!*",
-        markdown: true
+        type: 'text',
+        text: '*신규 멘토링이 등록되었습니다!*',
+        markdown: true,
       },
       {
         type: 'description',
@@ -151,8 +151,8 @@ export const userSearchResultModal = (type: string, users: ISomaUser[]) => {
         style: 'blue',
       },
       {
-        "type": "image_link",
-        "url": "https://i.ibb.co/yRYRpsL/kobu-agency-7okk-Fhxrx-Nw-unsplash.png"
+        type: 'image_link',
+        url: 'https://i.ibb.co/yRYRpsL/kobu-agency-7okk-Fhxrx-Nw-unsplash.png',
       },
     ],
   };
@@ -265,8 +265,8 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
         style: 'blue',
       },
       {
-        "type": "image_link",
-        "url": "https://i.ibb.co/crYD9DJ/robin-worrall-Q8-Hfu-O9udts-unsplash.png"
+        type: 'image_link',
+        url: 'https://i.ibb.co/crYD9DJ/robin-worrall-Q8-Hfu-O9udts-unsplash.png',
       },
     ],
   };
@@ -445,8 +445,8 @@ export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
         style: 'blue',
       },
       {
-        "type": "image_link",
-        "url": "https://i.ibb.co/VBZSzCr/behnam-norouzi-F32j-Py9-SMaw-unsplash.png"
+        type: 'image_link',
+        url: 'https://i.ibb.co/VBZSzCr/behnam-norouzi-F32j-Py9-SMaw-unsplash.png',
       },
     ],
   };
@@ -537,12 +537,12 @@ export const userNotificationSelectResult = (value: boolean) => {
     text: '알림 ON/OFF',
     blocks: [
       {
-        type: "header",
-        text: "*💡 알림설정을 완료했습니다.*",
-        style: "blue",
+        type: 'header',
+        text: '*💡 알림설정을 완료했습니다.*',
+        style: 'blue',
       },
       {
-        type: "divider"
+        type: 'divider',
       },
       {
         type: 'description',
