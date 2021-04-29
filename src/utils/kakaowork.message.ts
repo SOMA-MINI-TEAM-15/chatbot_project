@@ -7,9 +7,8 @@ export const broadcastMessage = (conversationId: number) => {
     text: '저어희는 크롤링을 하겠습니다. 거기에 소마를 곁들인',
     blocks: [
       {
-        type: 'header', // 헤더는 type을 header로 고정
-        text: '미니 프로젝트 15팀',
-        style: 'yellow', // blue, yello, red 택 1
+        type: 'image_link',
+        url: 'https://i.ibb.co/BtdSwL9/2.png',
       },
       {
         type: 'text',
@@ -21,28 +20,28 @@ export const broadcastMessage = (conversationId: number) => {
         type: 'button',
         action_type: 'call_modal',
         value: 'user_search',
-        text: '멘티/멘토 검색',
+        text: '👩‍👦 멘티/멘토 검색',
         style: 'primary',
       },
       {
         type: 'button',
         action_type: 'call_modal',
         value: 'mentoring_search',
-        text: '멘토링 검색',
+        text: '🔎 멘토링 검색',
         style: 'primary',
       },
       {
         type: 'button',
         action_type: 'call_modal',
         value: 'calendar',
-        text: '일정 확인',
+        text: '📅 일정 확인',
         style: 'primary',
       },
       {
         type: 'button',
         action_type: 'call_modal',
         value: 'noti_on_off',
-        text: '신규 멘토링 알림 켜고 끄기',
+        text: '💡 신규 멘토링 알림 켜고 끄기',
         style: 'primary',
       },
     ],
@@ -52,12 +51,16 @@ export const broadcastMessage = (conversationId: number) => {
 export const newLectureModal = (conversationId, mentoring: IMentoring) => {
   return {
     conversationId,
-    text: '새로운 멘토링 등록',
+    text: '신규 멘토링 알림',
     blocks: [
       {
-        type: 'header',
-        text: '새로운 멘토링이 등록되었습니다.',
-        style: 'yellow',
+        type: "image_link",
+        url: "https://i.ibb.co/ZJzyjH8/image.png"
+      },
+      {
+        type: "text",
+        text: "*신규 멘토링이 등록되었습니다!*",
+        markdown: true
       },
       {
         type: 'description',
@@ -71,7 +74,7 @@ export const newLectureModal = (conversationId, mentoring: IMentoring) => {
       },
       {
         type: 'description',
-        term: '작성자',
+        term: '멘토',
         content: {
           type: 'text',
           text: mentoring.writer,
@@ -97,13 +100,13 @@ export const userSearchRequestModal = () => {
   return {
     view: {
       title: '멘티/멘토 검색',
-      accept: '검색하기',
+      accept: '검색',
       decline: '취소',
       value: 'user_search',
       blocks: [
         {
           type: 'label',
-          text: '멘티와 멘토 중 선택해주세요.',
+          text: '구분',
           markdown: false,
         },
         {
@@ -146,6 +149,10 @@ export const userSearchResultModal = (type: string, users: ISomaUser[]) => {
         type: 'header',
         text: `🔎 ${type === 'mentee' ? '멘티' : '멘토'} 검색 결과`,
         style: 'blue',
+      },
+      {
+        "type": "image_link",
+        "url": "https://i.ibb.co/yRYRpsL/kobu-agency-7okk-Fhxrx-Nw-unsplash.png"
       },
     ],
   };
@@ -256,6 +263,10 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
         type: 'header',
         text: '🔎 멘토링 검색 결과(최신 3개)',
         style: 'blue',
+      },
+      {
+        "type": "image_link",
+        "url": "https://i.ibb.co/crYD9DJ/robin-worrall-Q8-Hfu-O9udts-unsplash.png"
       },
     ],
   };
@@ -433,6 +444,10 @@ export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
         text: `📅 ${month} 월 SWM 월간 일정표`,
         style: 'blue',
       },
+      {
+        "type": "image_link",
+        "url": "https://i.ibb.co/VBZSzCr/behnam-norouzi-F32j-Py9-SMaw-unsplash.png"
+      },
     ],
   };
 
@@ -522,9 +537,12 @@ export const userNotificationSelectResult = (value: boolean) => {
     text: '알림 ON/OFF',
     blocks: [
       {
-        type: 'header',
-        text: `알림설정을 완료했습니다.`,
-        style: 'blue',
+        type: "header",
+        text: "*💡 알림설정을 완료했습니다.*",
+        style: "blue",
+      },
+      {
+        type: "divider"
       },
       {
         type: 'description',
