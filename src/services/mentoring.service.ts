@@ -19,7 +19,7 @@ export async function getMentoringById(id: number): Promise<IMentoring> {
 }
 
 export async function getMentoringsByTitle(title: string, limit = 3): Promise<IMentoring[]> {
-  const dbData = await Mentoring.find({ title: { $regex: title } })
+  const dbData = await Mentoring.find({ title: { $regex: title, $options: "$i" } })
     .sort({ id: -1 })
     .limit(limit);
 
@@ -31,7 +31,7 @@ export async function getMentoringsByTitle(title: string, limit = 3): Promise<IM
 }
 
 export async function getMentoringsByContent(content: string, limit = 3): Promise<IMentoring[]> {
-  const dbData = await Mentoring.find({ content: { $regex: content } })
+  const dbData = await Mentoring.find({ content: { $regex: content, $options: "$i" } })
     .sort({ id: -1 })
     .limit(limit);
 
@@ -43,7 +43,7 @@ export async function getMentoringsByContent(content: string, limit = 3): Promis
 }
 
 export async function getMentoringsByWriter(writer: string, limit = 3): Promise<IMentoring[]> {
-  const dbData = await Mentoring.find({ writer: { $regex: writer } })
+  const dbData = await Mentoring.find({ writer: { $regex: writer, $options: "$i" } })
     .sort({ id: -1 })
     .limit(limit);
 
