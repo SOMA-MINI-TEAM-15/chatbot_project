@@ -8,6 +8,7 @@ import { addMentoring, getMostRecentMentoring, sendNewMentoringNotification } fr
 import { promisify } from 'util';
 import * as fs from 'fs-extra';
 import { resolve } from 'path';
+import { logger } from './logger';
 
 export const sleepPromise = promisify(setTimeout);
 
@@ -18,7 +19,7 @@ const lock = new Lock();
 let _isLoggedIn = true;
 
 export async function initialize(): Promise<void> {
-  console.log('initializing crawler...');
+  logger.info('initializing crawler...');
   browser = await puppeteer.launch({
     ignoreHTTPSErrors: true,
     headless: true,
@@ -38,15 +39,15 @@ export async function initialize(): Promise<void> {
     setTimeout(startCheckingNewMentoringsRoutine, 2000);
   }
 
-  console.log('initialize complete!');
+  logger.info('initialize complete!');
 }
 
 async function startCheckingNewMentoringsRoutine() {
-  console.log('check new mentoring');
+  logger.info('check new mentoring');
   const rescentLocalMentoring = await getMostRecentMentoring();
   const rescentOnlineMentoring = (await fetchMentorings())[0];
   if (rescentOnlineMentoring && rescentLocalMentoring && rescentOnlineMentoring.id > rescentLocalMentoring.id) {
-    console.log('new Mentoring exists');
+    logger.info('new Mentoring exists');
     const newMentorings: IMentoring[] = [];
     let i = 1;
     while (true) {
@@ -55,18 +56,18 @@ async function startCheckingNewMentoringsRoutine() {
       if (newMentoringsPartial.length === 0) break;
       newMentoringsPartial.forEach(m => newMentorings.push(m));
     }
-    console.log(`total ${newMentorings.length} new Mentorings`);
+    logger.info(`total ${newMentorings.length} new Mentorings`);
     for (const newMentoring of newMentorings) {
       const { content, mentoringLocation } = await fetchMentoringDetails(newMentoring.id);
       newMentoring.content = content;
       newMentoring.mentoringLocation = mentoringLocation;
       await addMentoring(newMentoring);
-      console.log(`new mentoring: ${newMentoring.id}`);
+      logger.info(`new mentoring: ${newMentoring.id}`);
       sendNewMentoringNotification(newMentoring);
       // eventEmitter.emit('new_mentoring', newMentoring);
     }
   } else {
-    console.log('no new Mentorings');
+    logger.info('no new Mentorings');
   }
   setTimeout(startCheckingNewMentoringsRoutine, 60 * 1000);
 }
@@ -235,7 +236,7 @@ async function fetchAllMentorings(): Promise<IMentoring[]> {
   while (true) {
     const mentorings = await fetchMentorings(i);
     if (mentorings.length === 0) break;
-    console.log(`page: ${i} count: ${mentorings.length}`);
+    logger.info(`page: ${i} count: ${mentorings.length}`);
     mentorings.forEach(m => retMentorings.push(m));
     await sleepPromise(500);
     i++;
@@ -252,10 +253,10 @@ async function saveAllMentorings(): Promise<void> {
 
 export async function loadAllMentorings(dir: string): Promise<void> {
   const data: IMentoring[] = await fs.readJson(dir);
-  console.log(`loaded ${data.length}`);
+  logger.info(`loaded ${data.length}`);
   for (const mentoring of data) {
     await addMentoring(mentoring);
-    console.log(`added id: ${mentoring.id}`);
+    logger.info(`added id: ${mentoring.id}`);
   }
-  console.log('complete');
+  logger.info('complete');
 }

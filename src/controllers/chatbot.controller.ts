@@ -44,8 +44,15 @@ class ChatbotController {
   public sendMessageToAllUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const users = await kakaoWork.getUserList();
+      const dbUsers = await (await ChatUser.find({ allowNotification: true })).map(user => user.userId);
       const conversations: KakaoWorkConversation[] = await Promise.all(
-        users.map((user: KakaoWorkUserInfo) => kakaoWork.openConversations({ userId: user.id })),
+        users.map((user: KakaoWorkUserInfo) => {
+          if (!dbUsers.includes(user.id)) {
+            ChatUser.create({ userId: user.id, allowNotification: true });
+          }
+
+          return kakaoWork.openConversations({ userId: user.id });
+        }),
       );
 
       const messages = await Promise.all([conversations.map(conversation => kakaoWork.sendMessage(broadcastMessage(conversation.id)))]);
@@ -123,8 +130,6 @@ class ChatbotController {
         default:
           break;
       }
-
-      console.log(responseModal);
 
       kakaoWork.sendMessage({
         conversationId: callbackInfo.message.conversation_id,

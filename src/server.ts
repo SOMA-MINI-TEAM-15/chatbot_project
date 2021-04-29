@@ -12,6 +12,5 @@ initialize()
   .then(() => {
     const app = new App([new IndexRoute(), new ChatbotRoute()]);
     app.listen();
-    console.log('Starting Server');
   })
   .catch((error: Error) => logger.error(error));
