@@ -2,7 +2,6 @@ import { EventEmitter } from 'events';
 export class Lock {
   private _locked = false;
   private _eventEmitter: EventEmitter = new EventEmitter();
-  constructor() {}
 
   acquire(): Promise<void> {
     return new Promise<void>(resolve => {
