@@ -557,3 +557,49 @@ export const userNotificationSelectResult = (value: boolean) => {
     ],
   };
 };
+
+export const reRequestModal = (conversationId: number) => {
+  return {
+    conversationId,
+    text: '저어희는 크롤링을 하겠습니다. 거기에 소마를 곁들인',
+    blocks: [
+      {
+        type: 'image_link',
+        url: 'https://i.ibb.co/BtdSwL9/2.png',
+      },
+      {
+        type: 'text',
+        text: '메뉴를 선택해주세요.',
+        markdown: true,
+      },
+      {
+        type: 'button',
+        action_type: 'call_modal',
+        value: 'user_search',
+        text: '👩‍👦 멘티/멘토 검색',
+        style: 'primary',
+      },
+      {
+        type: 'button',
+        action_type: 'call_modal',
+        value: 'mentoring_search',
+        text: '🔎 멘토링 검색',
+        style: 'primary',
+      },
+      {
+        type: 'button',
+        action_type: 'call_modal',
+        value: 'calendar',
+        text: '📅 일정 확인',
+        style: 'primary',
+      },
+      {
+        type: 'button',
+        action_type: 'call_modal',
+        value: 'noti_on_off',
+        text: '💡 신규 멘토링 알림 켜고 끄기',
+        style: 'primary',
+      },
+    ],
+  };
+};

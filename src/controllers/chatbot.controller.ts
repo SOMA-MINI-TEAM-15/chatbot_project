@@ -14,6 +14,7 @@ import {
   userSearchRequestModal,
   userSearchResultModal,
   userNotificationSelectResult,
+  reRequestModal,
 } from '../utils/kakaowork.message';
 
 class ChatbotController {
@@ -56,6 +57,7 @@ class ChatbotController {
           break;
         case 'noti_on_off':
           responseModal = userNotificationSelectModal();
+          break;
         default:
           break;
       }
@@ -107,13 +109,20 @@ class ChatbotController {
           break;
       }
 
-      kakaoWork.sendMessage({
+      await kakaoWork.sendMessage({
         conversationId: callbackInfo.message.conversation_id,
         text: responseModal.text,
         blocks: responseModal.blocks,
       });
 
       res.status(200).json(responseModal);
+
+      const menuModal = reRequestModal(callbackInfo.message.conversation_id);
+      await kakaoWork.sendMessage({
+        conversationId: callbackInfo.message.conversation_id,
+        text: menuModal.text,
+        blocks: menuModal.blocks,
+      });
     } catch (error) {
       next(error);
     }
