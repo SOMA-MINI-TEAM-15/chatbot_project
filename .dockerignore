@@ -8,3 +8,5 @@ Dockerfile.dev
 *.env
 
 src/logs
+
+img/
