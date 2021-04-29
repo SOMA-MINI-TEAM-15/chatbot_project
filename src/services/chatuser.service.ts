@@ -22,7 +22,7 @@ export async function flipChatUserNoti(userId: string, value: string): Promise<I
   }
 
   await ChatUser.updateOne({ userId }, { allowNotification: targetValue });
-  targetUser.allowNotification = !targetUser.allowNotification;
+  targetUser.allowNotification = targetValue;
   return targetUser;
 }
 
