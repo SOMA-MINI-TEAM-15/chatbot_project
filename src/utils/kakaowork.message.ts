@@ -12,8 +12,7 @@ export const broadcastMessage = (conversationId: number) => {
       },
       {
         type: 'text',
-        text:
-          '*SWM Bot*',
+        text: '*SWM Bot*',
         markdown: true,
       },
       {
@@ -189,7 +188,7 @@ export const userSearchResultModal = (type: string, users: ISomaUser[]) => {
       term: '메세지',
       content: {
         type: 'text',
-        text: '존재하지 않습니다.',
+        text: '존재하지 않아요.',
         markdown: false,
       },
       accent: true,
@@ -303,7 +302,7 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
       term: '메세지',
       content: {
         type: 'text',
-        text: '존재하지 않습니다.',
+        text: '존재하지 않아요.',
         markdown: false,
       },
       accent: true,
@@ -477,7 +476,18 @@ export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
     ],
   };
 
-  if (!schedules) {
+  if (schedules.length === 0) {
+    modal.blocks.push({
+      type: 'description',
+      term: '메세지',
+      content: {
+        type: 'text',
+        text: `${month}월에는 등록된 일정이 없어요.`,
+        markdown: false,
+      },
+      accent: true,
+    });
+
     return modal;
   }
 
@@ -564,7 +574,7 @@ export const userNotificationSelectResult = (value: boolean) => {
     blocks: [
       {
         type: 'header',
-        text: '*💡 알림설정을 완료했습니다.*',
+        text: '💡 알림설정을 완료했어요.',
         style: 'blue',
       },
       {
@@ -595,14 +605,12 @@ export const reRequestModal = (conversationId: number) => {
       },
       {
         type: 'text',
-        text:
-          '*SWM Bot*',
+        text: '*SWM Bot*',
         markdown: true,
       },
       {
         type: 'text',
-        text:
-          '저희 15팀은 소마를 진행하면서 예비멘토링 기간에 어려움을 겪은 여러분을 위해 솔루션을 제공하려 합니다!\n미니 프로젝트 평가가 끝나더라도 계속 사용할 수 있는 챗봇이니 많이 사용해주세요 :)',
+        text: '또 다른 기능이 필요하지 않으세요? 아래의 메뉴를 선택해주세요 (๑>ᴗ<๑)',
         markdown: true,
       },
       {
