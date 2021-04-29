@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { KakaoWorkCallbackInfo, KakaoWorkConversation, KakaoWorkRequestInfo, KakaoWorkUserInfo } from '../dtos/kakaowork.dto';
-import { ChatUser } from '../models/chatuser.model';
-import { flipChatUserNoti } from '../services/chatuser.service';
+import { addChatUser, flipChatUserNoti, getChatUsers } from '../services/chatuser.service';
 import { getMentoringsByContent, getMentoringsByTitle, getMentoringsByWriter } from '../services/mentoring.service';
-import { fetchMentorings, fetchSchedules, fetchSomaUsers } from '../utils/crawler';
+import { fetchSchedules, fetchSomaUsers, sleepPromise } from '../utils/crawler';
 import * as kakaoWork from '../utils/kakaowork';
 import {
   broadcastMessage,
@@ -15,40 +14,18 @@ import {
   userSearchRequestModal,
   userSearchResultModal,
   userNotificationSelectResult,
-  newLectureModal,
+  reRequestModal,
 } from '../utils/kakaowork.message';
 
 class ChatbotController {
-  public sendNewLectureNotification = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      // 검증 필요
-      const users = await kakaoWork.getUserList();
-      const dbUsers = await (await ChatUser.find({ allowNotification: true })).map(user => user.userId);
-      const conversations: KakaoWorkConversation[] = await Promise.all(
-        users.filter(user => dbUsers.includes(user.id)).map((user: KakaoWorkUserInfo) => kakaoWork.openConversations({ userId: user.id })),
-      );
-
-      // 이미 바뀐것을 인지했으므로 다시 크롤링 하지 않도록 변경 필요
-      const newMentoring = await fetchMentorings(1);
-
-      const messages = await Promise.all([
-        conversations.map(conversation => kakaoWork.sendMessage(newLectureModal(conversation.id, newMentoring[0]))),
-      ]);
-
-      res.status(200).json({ users, conversations, messages });
-    } catch (error) {
-      next(error);
-    }
-  };
-
   public sendMessageToAllUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const users = await kakaoWork.getUserList();
-      const dbUsers = await (await ChatUser.find({ allowNotification: true })).map(user => user.userId);
+      const dbUsers = await (await getChatUsers()).map(user => user.userId);
       const conversations: KakaoWorkConversation[] = await Promise.all(
         users.map((user: KakaoWorkUserInfo) => {
           if (!dbUsers.includes(user.id)) {
-            ChatUser.create({ userId: user.id, allowNotification: true });
+            addChatUser({ userId: user.id, allowNotification: true });
           }
 
           return kakaoWork.openConversations({ userId: user.id });
@@ -80,6 +57,7 @@ class ChatbotController {
           break;
         case 'noti_on_off':
           responseModal = userNotificationSelectModal();
+          break;
         default:
           break;
       }
@@ -131,13 +109,21 @@ class ChatbotController {
           break;
       }
 
-      kakaoWork.sendMessage({
+      await kakaoWork.sendMessage({
         conversationId: callbackInfo.message.conversation_id,
         text: responseModal.text,
         blocks: responseModal.blocks,
       });
 
       res.status(200).json(responseModal);
+
+      await sleepPromise(2500);
+      const menuModal = reRequestModal(callbackInfo.message.conversation_id);
+      await kakaoWork.sendMessage({
+        conversationId: callbackInfo.message.conversation_id,
+        text: menuModal.text,
+        blocks: menuModal.blocks,
+      });
     } catch (error) {
       next(error);
     }
