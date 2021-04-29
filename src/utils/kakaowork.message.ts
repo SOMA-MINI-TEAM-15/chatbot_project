@@ -313,6 +313,16 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
       },
       {
         type: 'description',
+        term: '위치',
+        content: {
+          type: 'text',
+          text: mentoring.mentoringLocation,
+          markdown: false,
+        },
+        accent: true,
+      },
+      {
+        type: 'description',
         term: '접수기간',
         content: {
           type: 'text',
