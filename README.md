@@ -1,7 +1,7 @@
 <h4 align="center"> 
 
 
-  ![TOAST UI Editor](https://uicdn.toast.com/toastui/img/tui-editor-bi.png)
+  ![logo](https://i.ibb.co/zHVB6DY/readme-logo.png)
 
   > 소프트웨어 마에스트로 유저 검색과 멘토링 알림 챗봇
 
@@ -51,21 +51,21 @@
 
 - #### 유저 검색
 
-  ![wysiwyg](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fc0ecf648-1486-4e3b-a927-ab59bae0a813%2FUntitled.png?table=block&id=859550a1-d3a0-4115-8d10-ffe5083f4f9f&width=3840&userId=d05dd97c-5d47-471e-a5cb-26cd8a57ebf7&cache=v2)
+  ![유저검색](https://i.ibb.co/nwsg1VB/image.png)
 
   * **멘티 검색** : 멘티의 이름을 검색
   * **멘토 검색** : 멘토의 이름을 검색
 
 - #### 일정
 
-  ![UI](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/cc82cc33-9f9c-4cd4-93cb-ffc21a5cf284/6.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210428%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210428T073511Z&X-Amz-Expires=86400&X-Amz-Signature=967f42c7de471b99b5c57ab5a5d6f5ff63d3aaf068939cefb739fd0e4622c5f7&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%226.png%22)
+  ![일정](https://i.ibb.co/2KSSjdJ/image.png)
 
   * **새로운 일정 알림** : 매달 1일이 되면 해당하는 달 일정을 알림
   * **월간 일정 조회** : 월간 일정 조회
 
 - #### 멘토링 검색
 
-  ![plugin](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/37c312f5-762c-45ad-aed9-921af85f6344/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210428%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210428T073537Z&X-Amz-Expires=86400&X-Amz-Signature=271a825f76675d190bcd209bd02cd8704c075f1aa59b32b9333e382d78c7accc&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22)
+  ![](https://i.ibb.co/rH7kW4b/image.png)
 
   * **멘토링 검색** : 멘토링 검색 기능
 
