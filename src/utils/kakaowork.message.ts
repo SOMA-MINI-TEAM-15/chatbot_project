@@ -139,7 +139,7 @@ export const userSearchRequestModal = () => {
 };
 
 export const userSearchResultModal = (type: string, users: ISomaUser[]) => {
-  const result = {
+  const modal: any = {
     text: `${type === 'mentee' ? '멘티' : '멘토'} 검색 결과`,
     blocks: [
       {
@@ -151,7 +151,7 @@ export const userSearchResultModal = (type: string, users: ISomaUser[]) => {
   };
 
   if (!users) {
-    result.blocks.push({
+    modal.blocks.push({
       type: 'description',
       term: '이름',
       content: {
@@ -162,11 +162,11 @@ export const userSearchResultModal = (type: string, users: ISomaUser[]) => {
       accent: true,
     });
 
-    return result;
+    return modal;
   }
 
   for (const user of users) {
-    result.blocks.push(
+    modal.blocks.push(
       {
         type: 'description',
         term: '이름',
@@ -193,7 +193,7 @@ export const userSearchResultModal = (type: string, users: ISomaUser[]) => {
     );
   }
 
-  return result;
+  return modal;
 };
 
 export const mentoringSearchRequestModal = () => {
@@ -246,7 +246,7 @@ export const mentoringSearchRequestModal = () => {
 };
 
 export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
-  const modal = {
+  const modal: any = {
     text: '멘토링 검색 결과',
     blocks: [
       {
@@ -400,7 +400,7 @@ export const calendarRequestModal = () => {
 };
 
 export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
-  const output = {
+  const modal: any = {
     text: '월간 일정',
     blocks: [
       {
@@ -412,11 +412,11 @@ export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
   };
 
   if (!schedules) {
-    return output;
+    return modal;
   }
 
   for (const schedule of schedules) {
-    output.blocks.push(
+    modal.blocks.push(
       {
         type: 'description',
         term: '제목',
@@ -453,7 +453,7 @@ export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
     );
   }
 
-  return output;
+  return modal;
 };
 
 export const userNotificationSelectModal = () => {
