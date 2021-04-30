@@ -15,8 +15,6 @@ class IndexRoute implements Route {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.indexController.index);
-    this.router.post(`${this.path}/request`, this.chatbotController.requestController);
-    this.router.post(`${this.path}/callback`, this.chatbotController.callbackController);
   }
 }
 
