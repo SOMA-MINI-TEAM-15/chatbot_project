@@ -379,26 +379,6 @@ export const mentoringSearchResultModal = (mentoringInfo: IMentoring[]) => {
         },
         accent: true,
       },
-      {
-        type: 'description',
-        term: '상태',
-        content: {
-          type: 'text',
-          text: mentoring.state,
-          markdown: false,
-        },
-        accent: true,
-      },
-      {
-        type: 'description',
-        term: '접수인원',
-        content: {
-          type: 'text',
-          text: mentoring.appliedCnt.toString(),
-          markdown: false,
-        },
-        accent: true,
-      },
     );
     if (index !== mentoringInfo.length - 1) {
       modal.blocks.push({
