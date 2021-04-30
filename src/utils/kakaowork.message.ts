@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { IMentoring, ISchedule, ISomaUser } from '../interfaces/soma.interface';
+import { IChatUser, IMentoring, ISchedule, ISomaUser } from '../interfaces/soma.interface';
 
 export const broadcastMessage = (conversationId: number) => {
   return {
@@ -526,7 +526,7 @@ export const calendarResultModal = (month: number, schedules: ISchedule[]) => {
   return modal;
 };
 
-export const userNotificationSelectModal = () => {
+export const userNotificationSelectModal = (chatUser : IChatUser) => {
   return {
     view: {
       title: '알림 ON/OFF',
@@ -536,7 +536,7 @@ export const userNotificationSelectModal = () => {
       blocks: [
         {
           type: 'label',
-          text: '알림을 설정해주세요.',
+          text: '알림을 설정해주세요.' + (chatUser ? ` (현재: ${chatUser.allowNotification ? 'on' : 'off'})` : ''),
           markdown: false,
         },
         {

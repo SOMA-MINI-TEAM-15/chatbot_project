@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { KakaoWorkCallbackInfo, KakaoWorkConversation, KakaoWorkRequestInfo, KakaoWorkUserInfo } from '../dtos/kakaowork.dto';
-import { addChatUser, flipChatUserNoti, getChatUsers } from '../services/chatuser.service';
+import { addChatUser, flipChatUserNoti, getChatUserById, getChatUsers } from '../services/chatuser.service';
 import { getMentoringsByContent, getMentoringsByTitle, getMentoringsByWriter } from '../services/mentoring.service';
 import { fetchSchedules, fetchSomaUsers, sleepPromise } from '../utils/crawler';
 import * as kakaoWork from '../utils/kakaowork';
@@ -78,7 +78,8 @@ class ChatbotController {
           responseModal = calendarRequestModal();
           break;
         case 'noti_on_off':
-          responseModal = userNotificationSelectModal();
+          const chatUser = await getChatUserById(`${requestInfo.react_user_id}`);
+          responseModal = userNotificationSelectModal(chatUser);
           break;
         default:
           break;
