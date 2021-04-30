@@ -26,7 +26,7 @@
   - [📅 일정 확인](#-일정-확인)
   - [🔎 멘토링 검색](#-멘토링-검색)
   - [💡 신규 멘토링 알림](#-신규-멘토링-알림)
-- [☕ Developers(by ㄱㄴㄷ order)](#developersby-ㄱㄴㄷ-order)
+- [☕ Developers(by ㄱㄴㄷ order)](#-developersby-ㄱㄴㄷ-order)
 - [🕒 README History](#-readme-history)
 
 
