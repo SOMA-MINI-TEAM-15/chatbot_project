@@ -22,6 +22,18 @@ export const broadcastMessage = (conversationId: number) => {
         markdown: true,
       },
       {
+        type: 'context',
+        content: {
+          type: 'text',
+          text: '[SWM Bot 사용방법](https://github.com/SOMA-MINI-TEAM-15/chatbot_project)',
+          markdown: true
+        },
+        image: {
+          type: 'image_link',
+          url: 'https://image.flaticon.com/icons/png/128/2232/2232688.png'
+        }
+      },
+      {
         type: 'button',
         action_type: 'call_modal',
         value: 'user_search',
